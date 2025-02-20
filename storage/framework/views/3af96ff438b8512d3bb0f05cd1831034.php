@@ -1,6 +1,14 @@
 
 <?php $__env->startSection('content'); ?>
 
+<style>
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: 0.4s;
+        border-top-color: rgba(85, 88, 228, 0.1);
+    }
+</style>
 <div class="row row-cols-1 row-cols-md-4">
     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Can Access User Card')): ?>
     <div class="col mb-4">
@@ -36,24 +44,7 @@
     </div>
     <?php endif; ?>
 
-    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Can Access Allocation Card')): ?>
-    <div class="col mb-4">
-        <div class="card total-standards-hover" style="height: 135px;">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="card-body">
-                    <h6 class="d-block text-500 font-medium mb-3">PENDING ALLOCATIONS</h6>
-                    <div class="text-900 fs-4" id="pending_allocation"></div>
-                </div>
-                <div class="d-flex align-items-center justify-content-center rounded"
-                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
-                    <i class='bx bxs-layout'></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
-
-    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Can Access Full Card')): ?>
+    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Can Access Product Card')): ?>
     <div class="col mb-4">
         <div class="card total-criterias-hover" style="height: 135px;">
             <div class="d-flex justify-content-between mb-3">
@@ -68,196 +59,162 @@
             </div>
         </div>
     </div>
-
-    <div class="col mb-4">
-        <div class="card total-section-hover" style="height: 135px;">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="card-body">
-                    <h6 class="d-block text-500 font-medium mb-3">TODAY'S ALLOCATED QUANTITY</h6>
-                    <div class="text-900 fs-4" id="todays_allocated_quantity"></div>
-                </div>
-                <div class="d-flex align-items-center justify-content-center rounded"
-                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
-                    <i class='bx bxs-folder-open'></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col mb-4">
-        <div class="card total-rubrics-hover" style="height: 135px;">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="card-body">
-                    <h6 class="d-block text-500 font-medium mb-3">TODAY'S ALLOCATION VALUE</h6>
-                    <div class="text-900 fs-4" id="todays_sales"></div>
-                </div>
-                <div class="d-flex align-items-center justify-content-center rounded"
-                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
-                    <i class='bx bxs-bar-chart-alt-2'></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col mb-4">
-        <div class="card total-rubrics-hover" style="height: 135px;">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="card-body">
-                    <h6 class="d-block text-500 font-medium mb-3">MONTHLY ALLOCATED QUANTITY</h6>
-                    <div class="text-900 fs-4" id="monthly_allocated_quantity"></div>
-                </div>
-                <div class="d-flex align-items-center justify-content-center rounded"
-                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
-                    <i class='bx bxs-bar-chart-alt-2'></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col mb-4">
-        <div class="card total-rubrics-hover" style="height: 135px;">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="card-body">
-                    <h6 class="d-block text-500 font-medium mb-3">MONTHLY ALLOCATION VALUE</h6>
-                    <div class="text-900 fs-4" id="monthly_sales"></div>
-                </div>
-                <div class="d-flex align-items-center justify-content-center rounded"
-                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
-                    <i class='bx bxs-bar-chart-alt-2'></i>
-                </div>
-            </div>
-        </div>
-    </div>
     <?php endif; ?>
-    <?php
-    $authId = Illuminate\Support\Facades\Auth::user()->id;
-
-    // Find the designation for Vice Chancellor (VC)
-    $designation = App\Models\Designation::where('designation', 'Vice Chancellor')
-    ->orWhere('short', 'VC')
-    ->first();
-
-    // Retrieve the first user with this designation, if any
-    $users = $designation ? App\Models\User::where('designation_id', $designation->id)->first() : null;
-    ?>
-
-    <?php if($users && $authId == $users->id): ?>
-    <div class="col mb-4">
-        <div class="card total-rubrics-hover" style="height: 135px;">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="card-body">
-                    <h6 class="d-block text-500 font-medium mb-3">TOTAL PENDING COMMITTEES</h6>
-                    <div class="text-900 fs-4" id="pending_committee"></div>
-                </div>
-                <div class="d-flex align-items-center justify-content-center rounded"
-                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
-                    <i class='bx bxs-bar-chart-alt-2'></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col mb-4">
-        <div class="card total-rubrics-hover" style="height: 135px;">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="card-body">
-                    <h6 class="d-block text-500 font-medium mb-3">TOTAL PENDING NOTES</h6>
-                    <div class="text-900 fs-4" id="pending_note"></div>
-                </div>
-                <div class="d-flex align-items-center justify-content-center rounded"
-                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
-                    <i class='bx bxs-bar-chart-alt-2'></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
-
 </div>
 
 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Can Access Full Card')): ?>
 <div class="row row-cols-2 row-cols-md-6">
-    <div class="col mb-4" style="width: 50%;">
+    <div class="col mb-4" style="width: 50%; height: 50%;">
         <div class="card">
             <div class="card-body text-center">
-                <h3>MONTHLY REPORTS</h3>
+                <h3>MONTHLY SALES REPORTS</h3>
             </div>
             <div class="pb-3">
-                <canvas id="monthly"></canvas>
+                <div id="monthly" style="height: 400px;"></div>
             </div>
         </div>
     </div>
-    <div class="col mb-4" style="width: 50%;">
+    <div class="col mb-4 box" style="width: 50%;">
         <div class="card">
             <div class="card-body text-center">
-                <h3>YEARLY REPORTS</h3>
+                <h3>YEARLY SALES REPORTS</h3>
             </div>
             <div class="pb-3">
-                <canvas id="yearly"></canvas>
+                <div id="yearly" style="height: 400px;"></div>
             </div>
         </div>
     </div>
 </div>
 <?php endif; ?>
 
-<div class="card p-3">
-    <div id="calendar">
 
+<div class="row row-cols-0 row-cols-md-6">
+    <div class="col mb-4 box" style="width: 50%;">
+        <div class="card">
+            <div class="card-body">
+                <h3>STOCK ALERT</h3>
+            </div>
+            <div class="table-responsive text-nowrap p-3">
+                <table id="datatable1" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Product Name</th>
+                            <th>Available Quantity</th>
+                            <th>Alert Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__currentLoopData = $lowStock; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <td><?php echo e($loop->iteration); ?></td>
+                            <td><?php echo e($product->product_name); ?></td>
+                            <td><?php echo e($product->final_quantity); ?></td>
+                            <td><?php echo e($product->final_quantity); ?></td>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col mb-4 box" style="width: 50%;">
+        <div class="card">
+            <div class="card-body">
+                <h3>EXPIRING PRODUCTS</h3>
+            </div>
+            <div class="table-responsive text-nowrap p-3">
+                <table id="datatable2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Product Name</th>
+                            <th>Expiry Date</th>
+                            <th>In Days</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__currentLoopData = $expiringProduct; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <td><?php echo e($loop->iteration); ?></td>
+                            <td><?php echo e($product->product_name); ?></td>
+                            <td><?php echo e(\Carbon\Carbon::parse($product->expiry_date)->format('M d, Y')); ?></td>
+                            <td>
+                                <?php
+                                    $days = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($product->expiry_date)) + 1;
+                                    echo floor($days) . ' ' . Str::plural('day', floor($days));
+                                ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
+<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Can Access Full Card')): ?>
+<div class="row row-cols-2 row-cols-md-6">
+    <div class="col mb-4 box" style="width: 50%;">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>MONTHLY COST REPORTS</h3>
+            </div>
+            <div class="pb-3">
+                <div id="monthly_cost" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-4 box" style="width: 50%;">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>YEARLY COST REPORTS</h3>
+            </div>
+            <div class="pb-3">
+                <div id="yearly_cost" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<!-- <div class="card p-3">
+    <div id="calendar">
+
+    </div>
+</div> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
+
+<!-- highchart -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 <script>
 $(document).ready(function() {
-    calendarEl = document.getElementById('calendar');
 
-    calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: ['timeline', 'dayGrid', 'timeGrid', 'interaction'],
-        editable: true,
-        header: {
-            left: 'today prev,next',
-            center: 'title',
-            right: 'timelineDay,timeGridWeek,dayGridMonth'
-        },
-        defaultView: 'dayGridMonth',
-        displayEventEnd: true,
-        selectable: true,
+    // Destroy and reinitialize datatable1
+    if ($.fn.dataTable.isDataTable('#datatable1')) {
+        $('#datatable1').DataTable().destroy();
+    }
+    $('#datatable1').DataTable({
+        "pageLength": 3, // Set the number of rows per page to 3
+        "lengthMenu": [3, 6, 10], // Option to change number of rows (3, 6, 10)
     });
-    calendar.render();
 
-    //total pending committee 
-    function GetPendingCommittee() {
-        return $.ajax({
-            url: "<?php echo e(route('pending.committee')); ?>",
-            type: "GET",
-            dataType: "json",
-            success: function(response) {
-                if (response.status == 200) {
-                    var totalUser = response.data.length;
-                    $('#pending_committee').html(totalUser);
-                } else {
-                    $('#pending_committee').html(0);
-                }
-            }
-        });
+    // Destroy and reinitialize datatable2
+    if ($.fn.dataTable.isDataTable('#datatable2')) {
+        $('#datatable2').DataTable().destroy();
     }
-    GetPendingCommittee();
-
-    //total pending note
-    function GetPendingNote() {
-        return $.ajax({
-            url: "<?php echo e(route('pending.note')); ?>",
-            type: "GET",
-            dataType: "json",
-            success: function(response) {
-                if (response.status == 200) {
-                    var totalUser = response.data.length;
-                    $('#pending_note').html(totalUser);
-                } else {
-                    $('#pending_note').html(0);
-                }
-            }
-        });
-    }
-    GetPendingNote();
+    $('#datatable2').DataTable({
+        "pageLength": 3, // Set the number of rows per page to 3
+        "lengthMenu": [3, 6, 10], // Option to change number of rows (3, 6, 10)
+    });
 
     //total user 
     function GetUser() {
@@ -294,24 +251,6 @@ $(document).ready(function() {
         });
     }
     GetPendingRequisition();
-
-    //pending_allocation
-    function GetPendingAllocation() {
-        return $.ajax({
-            url: "<?php echo e(route('allocations.index')); ?>",
-            type: "GET",
-            dataType: "json",
-            success: function(response) {
-                if (response.status == true) {
-                    var pendingAllocation = response.data.length;
-                    $('#pending_allocation').html(pendingAllocation);
-                } else {
-                    $('#pending_allocation').html(0);
-                }
-            }
-        });
-    }
-    GetPendingAllocation();
 
     //total product
     function GetTotalProduct() {
@@ -407,106 +346,310 @@ $(document).ready(function() {
     }
     GetMonthlySales();
 
-    // Monthly report
     function GetMonthlyReport() {
-        return $.ajax({
+        $.ajax({
             url: "<?php echo e(route('statistics.monthly')); ?>",
             type: "GET",
             dataType: "json",
             success: function(response) {
                 if (response.status === true) {
-                    var monthlyReport = response.data;
-                    var ctx = document.getElementById('monthly').getContext('2d');
-                    var myChart = new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: ['January', 'February', 'March', 'April', 'May', 'June',
-                                'July',
-                                'August', 'September', 'October', 'November', 'December'
-                            ],
-                            datasets: [{
-                                label: 'Monthly Sales',
-                                data: monthlyReport,
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.2)', // January
-                                    'rgba(54, 162, 235, 0.2)', // February
-                                    'rgba(255, 206, 86, 0.2)', // March
-                                    'rgba(75, 192, 192, 0.2)', // April
-                                    'rgba(153, 102, 255, 0.2)', // May
-                                    'rgba(255, 159, 64, 0.2)', // June
-                                    'rgba(199, 199, 199, 0.2)', // July
-                                    'rgba(83, 102, 255, 0.2)', // August
-                                    'rgba(56, 159, 64, 0.2)', // September
-                                    'rgba(75, 92, 192, 0.2)', // October
-                                    'rgba(153, 202, 255, 0.2)', // November
-                                    'rgba(255, 109, 64, 0.2)' // December
-                                ],
-                                borderColor: [
-                                    'rgba(255, 99, 132, 1)', // January
-                                    'rgba(54, 162, 235, 1)', // February
-                                    'rgba(255, 206, 86, 1)', // March
-                                    'rgba(75, 192, 192, 1)', // April
-                                    'rgba(153, 102, 255, 1)', // May
-                                    'rgba(255, 159, 64, 1)', // June
-                                    'rgba(199, 199, 199, 1)', // July
-                                    'rgba(83, 102, 255, 1)', // August
-                                    'rgba(56, 159, 64, 1)', // September
-                                    'rgba(75, 92, 192, 1)', // October
-                                    'rgba(153, 202, 255, 1)', // November
-                                    'rgba(255, 109, 64, 1)' // December
-                                ],
-                                borderWidth: 1
-                            }]
+                    var monthlyData = response.data.map(Number); // Convert data to numbers
+                    var categories = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+
+                    Highcharts.chart('monthly', {
+                        chart: {
+                            type: 'pie',
+                            backgroundColor: '#FFFFFF', // Light background
+                            options3d: {
+                                enabled: true,
+                                alpha: 45
+                            }
                         },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
+                        title: {
+                            text: "Monthly Report"
+                        },
+                        plotOptions: {
+                            pie: {
+                                innerSize: 100, // Donut effect
+                                depth: 45,
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                                 }
                             }
-                        }
+                        },
+                        tooltip: {
+                            pointFormat: "{series.name}: <b>{point.y} Tk</b>"
+                        },
+                        series: [{
+                            name: 'Total Cost',
+                            data: categories.map((month, index) => ({
+                                name: month,
+                                y: monthlyData[index] || 0
+                            })),
+                            colors: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                                '#FF9F40', '#C9CBCF', '#5283FF', '#38BF64', '#4B92C0',
+                                '#99CAFF', '#FF6D40'
+                            ]
+                        }]
                     });
                 }
             }
         });
     }
+
     GetMonthlyReport();
 
-    // Yearly report
     function GetYearlyReport() {
-        return $.ajax({
+        $.ajax({
             url: "<?php echo e(route('statistics.yearly')); ?>",
             type: "GET",
             dataType: "json",
             success: function(response) {
                 if (response.status === true) {
                     var yearlyReport = response.data;
-                    var ctx = document.getElementById('yearly').getContext('2d');
-                    var myChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: yearlyReport.years,
-                            datasets: [{
-                                label: 'Yearly Sales',
-                                data: yearlyReport.sales,
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 1
-                            }]
+
+                    Highcharts.chart('yearly', {
+                        chart: {
+                            type: 'column', // Bar chart type
+                            backgroundColor: '#ffffff', // White background
+                            zoomType: 'xy' // Enable zooming on both axes
                         },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
+                        title: {
+                            text: 'Yearly Sales Report',
+                            align: 'center',
+                            style: {
+                                fontSize: '18px',
+                                fontWeight: 'bold',
+                                color: '#333'
+                            }
+                        },
+                        xAxis: {
+                            categories: yearlyReport.years,
+                            title: {
+                                text: 'Years'
+                            },
+                            crosshair: true,
+                            gridLineWidth: 1
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Total Sales (Tk.)'
+                            },
+                            gridLineWidth: 1,
+                            labels: {
+                                format: '{value} Tk'
+                            }
+                        },
+                        tooltip: {
+                            shared: true,
+                            useHTML: true,
+                            headerFormat: '<b>{point.x}</b><br>',
+                            pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: <b>{point.y} Tk</b><br>',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            style: {
+                                color: '#ffffff'
+                            },
+                            borderRadius: 10
+                        },
+                        series: [
+                            {
+                                name: 'Yearly Sales',
+                                type: 'column',
+                                data: yearlyReport.sales,
+                                color: '#36A2EB',
+                                borderWidth: 2
+                            },
+                            {
+                                name: 'Sales Trend',
+                                type: 'spline', // Smooth line chart for trend analysis
+                                data: yearlyReport.sales,
+                                color: '#FF6384',
+                                lineWidth: 3,
+                                marker: {
+                                    enabled: true,
+                                    symbol: 'circle',
+                                    radius: 5,
+                                    fillColor: '#ffffff',
+                                    lineWidth: 2,
+                                    lineColor: '#FF6384'
                                 }
                             }
+                        ],
+                        legend: {
+                            enabled: true,
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        },
+                        exporting: {
+                            enabled: true // Allows export to PNG, PDF, etc.
                         }
                     });
                 }
             }
         });
     }
+
     GetYearlyReport();
+
+    // Monthly Report using Highcharts
+    function GetMonthlyCostReport() {
+        $.ajax({
+            url: "<?php echo e(route('statistics.monthly.cost')); ?>",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.status === true) {
+                    var monthlyData = response.data.map(Number); // Convert data to numbers
+                    var categories = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+
+                    Highcharts.chart('monthly_cost', {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: "Monthly Cost Distribution"
+                        },
+                        tooltip: {
+                            pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+                        },
+                        accessibility: {
+                            point: {
+                                valueSuffix: '%'
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Cost',
+                            colorByPoint: true,
+                            data: categories.map((month, index) => ({
+                                name: month,
+                                y: monthlyData[index] || 0
+                            }))
+                        }]
+                    });
+                }
+            }
+        });
+    }
+
+    function GetYearlyCostReport() {
+        $.ajax({
+            url: "<?php echo e(route('statistics.yearly.cost')); ?>",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.status === true) {
+                    var yearlyReport = response.data;
+
+                    Highcharts.chart('yearly_cost', {
+                        chart: {
+                            type: 'spline', // Smooth curved line chart
+                            backgroundColor: '#FFFFFF', // Light background
+                            zoomType: 'x', // Zoom functionality
+                            animation: {
+                                duration: 2000,
+                                easing: 'easeOutBounce'
+                            }
+                        },
+                        title: {
+                            text: 'Yearly Cost Report',
+                            align: 'center',
+                            style: {
+                                fontSize: '18px',
+                                fontWeight: 'bold',
+                                color: '#333'
+                            }
+                        },
+                        xAxis: {
+                            categories: yearlyReport.years,
+                            title: {
+                                text: 'Years'
+                            },
+                            gridLineWidth: 1, // Light grid lines
+                            crosshair: true
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Total Cost (Tk.)'
+                            },
+                            gridLineWidth: 1, // Light grid lines
+                            labels: {
+                                format: '{value} Tk'
+                            }
+                        },
+                        tooltip: {
+                            shared: true,
+                            useHTML: true,
+                            headerFormat: '<b>{point.x}</b><br>',
+                            pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: <b>{point.y} Tk</b><br>',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            style: {
+                                color: '#ffffff'
+                            },
+                            borderRadius: 10
+                        },
+                        series: [{
+                            name: 'Yearly Cost',
+                            data: yearlyReport.sales,
+                            color: {
+                                linearGradient: [0, 0, 0, 400], // Gradient color
+                                stops: [
+                                    [0, 'rgba(255, 99, 132, 1)'],
+                                    [1, 'rgba(255, 99, 132, 0.2)']
+                                ]
+                            },
+                            lineWidth: 3, // Thicker line
+                            marker: {
+                                enabled: true, // Show points
+                                symbol: 'circle',
+                                radius: 5,
+                                fillColor: '#ffffff',
+                                lineWidth: 2,
+                                lineColor: '#FF6384'
+                            },
+                            shadow: {
+                                color: 'rgba(0, 0, 0, 0.3)',
+                                width: 10,
+                                offsetX: 0,
+                                offsetY: 3
+                            },
+                            states: {
+                                hover: {
+                                    lineWidth: 4
+                                }
+                            }
+                        }],
+                        legend: {
+                            enabled: true,
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        },
+                        exporting: {
+                            enabled: true // Allows export to PNG, PDF, etc.
+                        }
+                    });
+                }
+            }
+        });
+    }
+    // Fetch Reports
+    GetMonthlyCostReport();
+    GetYearlyCostReport();
 });
 </script>
 <?php $__env->stopSection(); ?>

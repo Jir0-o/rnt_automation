@@ -257,7 +257,7 @@
                                                                 class="form-label">Unit Package Size <span
                                                                     class="text-danger">*</span></label>
                                                             <input type="number" class="form-control"
-                                                                id="edit-unit-package-size" name="unit_package_size"
+                                                                id="edit-unit-package-size" name="edit-unit-package-size"
                                                                 required>
                                                             <span class="text-danger" id="UnitPackageSizeError"></span>
                                                         </div>
@@ -573,6 +573,7 @@ $(document).ready(function() {
                 $('#edit-bill-no').val(product.bill_no);
                 $('#edit_requisition_no').val(product.requisition_no);
                 $('#edit-product-category').val(product.product_categorie_id);
+                $('#edit-unit-package-size').val(product.unit_package_size);
                 $('#EditProduct').modal('show');
             },
             error: function(xhr, status, error) {

@@ -14,7 +14,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $company = Company::all();
+        $company = Company::where('is_active', 1)->get();
         return view('company.createCompany', compact('company'));
     }
 
@@ -24,7 +24,7 @@ class CompanyController extends Controller
     public function create()
     {
         try {
-            $company = Company::all();
+            $company = Company::where('is_active', 1)->get();
 
             return response()->json([
                 'status' => true,
@@ -147,7 +147,6 @@ class CompanyController extends Controller
             $company->address = $validated['address'];
             $company->buyer_name = $validated['buyer_name'];
             $company->description = $validated['description'];
-            $company->is_active = 1;
             $company->save();
 
             return response()->json([

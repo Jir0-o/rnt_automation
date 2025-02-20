@@ -1,0 +1,707 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jun 14, 2024 at 11:24 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Database: `procurement`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `allocated_products`
+--
+
+CREATE TABLE `allocated_products` (
+  `id` int(11) NOT NULL,
+  `ALLOCATION_ID` int(11) NOT NULL,
+  `REQ_ID` int(11) NOT NULL,
+  `CONTRACT_ID` int(11) NOT NULL,
+  `RNI_NO` int(11) NOT NULL,
+  `FROM_WH` int(11) NOT NULL,
+  `TO_SND` int(11) NOT NULL,
+  `PRODUCT_ID` int(11) NOT NULL,
+  `QUANTITY` float NOT NULL,
+  `UNIT_PRICE` float NOT NULL,
+  `TOTAL_PRICE` float NOT NULL,
+  `Product_Condition_ID` int(11) NOT NULL,
+  `PRODUCT_IDENTIFICATION_NO` text NOT NULL,
+  `REVERTED` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `allocation`
+--
+
+CREATE TABLE `allocation` (
+  `ALLOCATION_ID` int(11) NOT NULL,
+  `ALLOCATION_DATE` date NOT NULL,
+  `ALLOCATION_NO` text NOT NULL,
+  `SUBJECT` text NOT NULL,
+  `VALIDITY_DATE` date NOT NULL,
+  `VALIDITY_DAYS` int(11) NOT NULL,
+  `REQ_ID` int(11) NOT NULL,
+  `AUTH_LVL` text NOT NULL,
+  `IS_ISU` int(11) NOT NULL,
+  `remarks` text NOT NULL,
+  `CC` text NOT NULL,
+  `USER_ID` int(11) NOT NULL,
+  `REVERTED` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `authorized_person`
+--
+
+CREATE TABLE `authorized_person` (
+  `ID` int(11) NOT NULL,
+  `ALLOCATION_ID` int(11) NOT NULL,
+  `WAREHOUSE_ID` int(11) NOT NULL,
+  `AUTHORIZED_PERSON` varchar(250) NOT NULL,
+  `AP_ID_NO` varchar(50) NOT NULL,
+  `AP_DESIGNATION` varchar(100) NOT NULL,
+  `AP_DATE` date NOT NULL,
+  `USER_ID` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `designation`
+--
+
+CREATE TABLE `designation` (
+  `id` int(11) NOT NULL,
+  `DESIGNATION` text NOT NULL,
+  `SHORT` varchar(50) NOT NULL,
+  `PRIORITY_LEVEL` int(11) NOT NULL,
+  `ALLOCATION_AUTH_LEVEL` int(11) NOT NULL,
+  `IV_AUTH_LEVEL` int(11) NOT NULL,
+  `RNI_AUTH_LEVEL` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `issue_voucher`
+--
+
+CREATE TABLE `issue_voucher` (
+  `ISU_ID` int(11) NOT NULL,
+  `AUTH_ID` int(11) NOT NULL,
+  `ISU_NO` text NOT NULL,
+  `ISU_DATE` date NOT NULL,
+  `ISU_BY_WH` int(11) NOT NULL,
+  `VEHICLE` text NOT NULL,
+  `ALLOC_ID` int(11) NOT NULL,
+  `USER_ID` int(11) NOT NULL,
+  `STATUS` int(11) NOT NULL,
+  `AUTH` int(11) NOT NULL,
+  `REMARKS` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `procurement_info`
+--
+
+CREATE TABLE `procurement_info` (
+  `PROCUREMENT_ID` int(11) NOT NULL,
+  `TENDER_NUMBER` varchar(300) NOT NULL,
+  `TENDER_DATE` date NOT NULL,
+  `TENDER_WINNER` varchar(300) NOT NULL,
+  `SUPPLIER_ADDRESS` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product`
+--
+
+CREATE TABLE `product` (
+  `PRODUCT_ID` int(11) NOT NULL,
+  `PRODUCT_NAME` varchar(250) NOT NULL,
+  `UNIT_TYPE` int(11) NOT NULL,
+  `PRODUCT_CATEGORY_ID` int(11) NOT NULL,
+  `IS_FRAC` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `productcategory`
+--
+
+CREATE TABLE `productcategory` (
+  `PRODUCT_CATEGORY_ID` int(11) NOT NULL,
+  `PRODUCT_CATEGORY_NAME` varchar(150) NOT NULL,
+  `MINIMUM_QUANTITY` int(11) NOT NULL,
+  `IS_DEFINED_INDIVIDUALLY` tinyint(1) NOT NULL,
+  `IS_ACTIVE` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `received_products`
+--
+
+CREATE TABLE `received_products` (
+  `ID` int(11) NOT NULL,
+  `RECIEVE_ID` int(11) NOT NULL,
+  `CONTRACT_ID` int(11) NOT NULL,
+  `RNI_NO` int(11) NOT NULL,
+  `PRODUCT_ID` int(11) NOT NULL,
+  `UNIT_PRICE` float NOT NULL,
+  `TOTAL_PRICE` float NOT NULL,
+  `UNIT_TYPE` int(11) NOT NULL,
+  `QUANTITY` float NOT NULL,
+  `RECIEVED_STORE` int(11) NOT NULL,
+  `Product_Condition_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `recieve_info`
+--
+
+CREATE TABLE `recieve_info` (
+  `RECIEVE_ID` int(11) NOT NULL,
+  `CONTRACT_ID` int(11) NOT NULL,
+  `RNI_NO` int(11) NOT NULL,
+  `RECIEVE_DATE` date NOT NULL,
+  `RECIEVED_BY` text NOT NULL,
+  `AUTH` int(11) NOT NULL,
+  `STATUS` int(11) NOT NULL,
+  `Comments` text NOT NULL,
+  `CC` text NOT NULL,
+  `USER_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `requisition`
+--
+
+CREATE TABLE `requisition` (
+  `REQ_ID` int(11) NOT NULL,
+  `REQ_SND` int(11) NOT NULL,
+  `REQ_TYPE` int(11) NOT NULL,
+  `REQ_DATE` date NOT NULL,
+  `USER_ID` int(11) NOT NULL,
+  `STATUS` int(11) NOT NULL,
+  `AUTH` int(11) NOT NULL,
+  `ALLOC` int(11) NOT NULL,
+  `REMARKS` text NOT NULL,
+  `CC` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `requisition_attachment`
+--
+
+CREATE TABLE `requisition_attachment` (
+  `id` int(11) NOT NULL,
+  `REQ_ID` int(11) NOT NULL,
+  `FILENAME` text NOT NULL,
+  `EXTENSION` text NOT NULL,
+  `FILE` mediumblob NOT NULL,
+  `UPLOAD_DATE` date NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `requisition_type`
+--
+
+CREATE TABLE `requisition_type` (
+  `Allocation_Type_ID` int(11) NOT NULL,
+  `Allocation_Type` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `req_products`
+--
+
+CREATE TABLE `req_products` (
+  `ID` int(11) NOT NULL,
+  `REQ_ID` int(11) NOT NULL,
+  `PRODUCT_ID` int(11) NOT NULL,
+  `QUANTITY` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `store_info`
+--
+
+CREATE TABLE `store_info` (
+  `STORE_ID` int(11) NOT NULL,
+  `STORE_NAME` varchar(250) NOT NULL,
+  `STORE_LOCATION` varchar(250) NOT NULL,
+  `STORE_COANTACT` varchar(50) NOT NULL,
+  `STORE_TYPE_ID` int(11) NOT NULL,
+  `CIRCLE_ID` int(11) NOT NULL,
+  `ZONE_ID` int(11) NOT NULL,
+  `PARENT_OFFICE` int(11) NOT NULL,
+  `OFFICE_TYPE` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `store_product_final`
+--
+
+CREATE TABLE `store_product_final` (
+  `ID` int(11) NOT NULL,
+  `CONTRACT_ID` int(11) NOT NULL,
+  `RNI_NO` int(11) NOT NULL,
+  `STORE_ID` int(11) NOT NULL,
+  `PRODUCT_ID` int(11) NOT NULL,
+  `FINAL_QTY` float NOT NULL,
+  `TEMP_QTY` float NOT NULL,
+  `UNIT_PRICE` double NOT NULL,
+  `LAST_UPDATED_ON` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supplier_info`
+--
+
+CREATE TABLE `supplier_info` (
+  `SUP_ID` int(11) NOT NULL,
+  `SUP_NAME` text NOT NULL,
+  `SUP_ADDR` text NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supply_order_info`
+--
+
+CREATE TABLE `supply_order_info` (
+  `ID` int(11) NOT NULL,
+  `PROC_ID` int(11) NOT NULL,
+  `SO_NO` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `SO_DATE` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temp_allocated_products`
+--
+
+CREATE TABLE `temp_allocated_products` (
+  `temp_id` int(11) NOT NULL,
+  `USER_ID` int(11) NOT NULL,
+  `REQ_ID` int(11) NOT NULL,
+  `CONTRACT_ID` int(11) NOT NULL,
+  `RNI_NO` int(11) NOT NULL,
+  `FROM_WH` int(11) NOT NULL,
+  `TO_SND` int(11) NOT NULL,
+  `PRODUCT_ID` int(11) NOT NULL,
+  `QUANTITY` float NOT NULL,
+  `UNIT_PRICE` float NOT NULL,
+  `TOTAL_PRICE` float NOT NULL,
+  `Product_Condition_ID` int(11) NOT NULL,
+  `PRODUCT_IDENTIFICATION_NO` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temp_received_products`
+--
+
+CREATE TABLE `temp_received_products` (
+  `TEMP_ID` int(11) NOT NULL,
+  `USER_ID` int(11) NOT NULL,
+  `PRODUCT_ID` int(11) NOT NULL,
+  `UNIT_PRICE` float NOT NULL,
+  `TOTAL_PRICE` float NOT NULL,
+  `UNIT_TYPE` int(11) NOT NULL,
+  `QUANTITY` float NOT NULL,
+  `RECIEVED_STORE` int(11) NOT NULL,
+  `Product_Condition_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temp_req_products`
+--
+
+CREATE TABLE `temp_req_products` (
+  `TEMP_ID` int(11) NOT NULL,
+  `PRODUCT_ID` int(11) NOT NULL,
+  `QUANTITY` float NOT NULL,
+  `USER_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `unit_type`
+--
+
+CREATE TABLE `unit_type` (
+  `UNIT_ID` int(11) NOT NULL,
+  `UNIT_TYPE_NAME` text NOT NULL,
+  `UNIT_SYMBOL` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `USER_ID` int(6) NOT NULL,
+  `TOKEN` text NOT NULL,
+  `USER_NAME` varchar(250) NOT NULL,
+  `EMAIL` varchar(150) NOT NULL,
+  `DESIGNATION_ID` int(11) NOT NULL,
+  `PASSWRD` text NOT NULL,
+  `USER_CATEGORY_ID` int(11) NOT NULL,
+  `STORE_ID` int(11) NOT NULL,
+  `SIGNATURE` mediumblob DEFAULT NULL,
+  `IS_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  `NEWPASS` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `zone`
+--
+
+CREATE TABLE `zone` (
+  `ID` int(11) NOT NULL,
+  `ZONE_NAME` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `allocated_products`
+--
+ALTER TABLE `allocated_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `allocation`
+--
+ALTER TABLE `allocation`
+  ADD PRIMARY KEY (`ALLOCATION_ID`);
+
+--
+-- Indexes for table `authorized_person`
+--
+ALTER TABLE `authorized_person`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `designation`
+--
+ALTER TABLE `designation`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `issue_voucher`
+--
+ALTER TABLE `issue_voucher`
+  ADD PRIMARY KEY (`ISU_ID`);
+
+--
+-- Indexes for table `procurement_info`
+--
+ALTER TABLE `procurement_info`
+  ADD PRIMARY KEY (`PROCUREMENT_ID`);
+
+--
+-- Indexes for table `product`
+--
+ALTER TABLE `product`
+  ADD PRIMARY KEY (`PRODUCT_ID`);
+
+--
+-- Indexes for table `productcategory`
+--
+ALTER TABLE `productcategory`
+  ADD PRIMARY KEY (`PRODUCT_CATEGORY_ID`);
+
+--
+-- Indexes for table `received_products`
+--
+ALTER TABLE `received_products`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `recieve_info`
+--
+ALTER TABLE `recieve_info`
+  ADD PRIMARY KEY (`RECIEVE_ID`);
+
+--
+-- Indexes for table `requisition`
+--
+ALTER TABLE `requisition`
+  ADD PRIMARY KEY (`REQ_ID`);
+
+--
+-- Indexes for table `requisition_attachment`
+--
+ALTER TABLE `requisition_attachment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `requisition_type`
+--
+ALTER TABLE `requisition_type`
+  ADD PRIMARY KEY (`Allocation_Type_ID`);
+
+--
+-- Indexes for table `req_products`
+--
+ALTER TABLE `req_products`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `store_info`
+--
+ALTER TABLE `store_info`
+  ADD PRIMARY KEY (`STORE_ID`);
+
+--
+-- Indexes for table `store_product_final`
+--
+ALTER TABLE `store_product_final`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `supplier_info`
+--
+ALTER TABLE `supplier_info`
+  ADD PRIMARY KEY (`SUP_ID`);
+
+--
+-- Indexes for table `supply_order_info`
+--
+ALTER TABLE `supply_order_info`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `temp_allocated_products`
+--
+ALTER TABLE `temp_allocated_products`
+  ADD PRIMARY KEY (`temp_id`);
+
+--
+-- Indexes for table `temp_received_products`
+--
+ALTER TABLE `temp_received_products`
+  ADD PRIMARY KEY (`TEMP_ID`);
+
+--
+-- Indexes for table `temp_req_products`
+--
+ALTER TABLE `temp_req_products`
+  ADD PRIMARY KEY (`TEMP_ID`);
+
+--
+-- Indexes for table `unit_type`
+--
+ALTER TABLE `unit_type`
+  ADD PRIMARY KEY (`UNIT_ID`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`USER_ID`);
+
+--
+-- Indexes for table `zone`
+--
+ALTER TABLE `zone`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `allocated_products`
+--
+ALTER TABLE `allocated_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `allocation`
+--
+ALTER TABLE `allocation`
+  MODIFY `ALLOCATION_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `authorized_person`
+--
+ALTER TABLE `authorized_person`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `designation`
+--
+ALTER TABLE `designation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `issue_voucher`
+--
+ALTER TABLE `issue_voucher`
+  MODIFY `ISU_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `procurement_info`
+--
+ALTER TABLE `procurement_info`
+  MODIFY `PROCUREMENT_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product`
+--
+ALTER TABLE `product`
+  MODIFY `PRODUCT_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `productcategory`
+--
+ALTER TABLE `productcategory`
+  MODIFY `PRODUCT_CATEGORY_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `received_products`
+--
+ALTER TABLE `received_products`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `recieve_info`
+--
+ALTER TABLE `recieve_info`
+  MODIFY `RECIEVE_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `requisition`
+--
+ALTER TABLE `requisition`
+  MODIFY `REQ_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `requisition_attachment`
+--
+ALTER TABLE `requisition_attachment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `requisition_type`
+--
+ALTER TABLE `requisition_type`
+  MODIFY `Allocation_Type_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `req_products`
+--
+ALTER TABLE `req_products`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `store_info`
+--
+ALTER TABLE `store_info`
+  MODIFY `STORE_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `store_product_final`
+--
+ALTER TABLE `store_product_final`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `supplier_info`
+--
+ALTER TABLE `supplier_info`
+  MODIFY `SUP_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `supply_order_info`
+--
+ALTER TABLE `supply_order_info`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `temp_allocated_products`
+--
+ALTER TABLE `temp_allocated_products`
+  MODIFY `temp_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `temp_received_products`
+--
+ALTER TABLE `temp_received_products`
+  MODIFY `TEMP_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `temp_req_products`
+--
+ALTER TABLE `temp_req_products`
+  MODIFY `TEMP_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `unit_type`
+--
+ALTER TABLE `unit_type`
+  MODIFY `UNIT_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `USER_ID` int(6) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `zone`
+--
+ALTER TABLE `zone`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;

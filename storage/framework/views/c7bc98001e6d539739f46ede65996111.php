@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('content'); ?>
 
 <style>
@@ -98,7 +97,7 @@
                         <br>
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="SrNo">Order No.</label>
+                                <label for="SrNo">S.R No.</label>
                                 <input type="number" id="sr_no" name="sr_no" class="form-control">
                                 <span class="text-danger" id="SubCategoryError"></span>
                             </div>

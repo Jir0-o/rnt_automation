@@ -328,14 +328,14 @@ function fetchNotificationCounts() {
                 // Check if the user has a profile photo
                 if (response.data.profile_photo_path) {
                     // If profile photo exists, set the image source
-                    $('#user-image').attr('src', '/global_assets/user_images/' + response.data
+                    $('#user-image').attr('src', '/public/global_assets/user_images/' + response.data
                         .profile_photo_path);
-                    $('#dropdown-user-image').attr('src', '/global_assets/user_images/' + response
+                    $('#dropdown-user-image').attr('src', '/public/global_assets/user_images/' + response
                         .data.profile_photo_path);
                 } else {
                     // If no profile photo exists, set a default image source
-                    $('#user-image').attr('src', '/global_assets/user_images/default.png');
-                    $('#dropdown-user-image').attr('src', '/global_assets/user_images/default.png');
+                    $('#user-image').attr('src', '/public/global_assets/user_images/default.png');
+                    $('#dropdown-user-image').attr('src', '/public/global_assets/user_images/default.png');
                 }
                 // Check if the user has a role
                 if (response.data.userhas_role) {

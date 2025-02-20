@@ -19,7 +19,7 @@ class Company extends Model
 
     public function requisitions()
     {
-        return $this->hasMany(Requisition::class, );
+        return $this->hasMany(Requisition::class);
     }
 
     public function order()

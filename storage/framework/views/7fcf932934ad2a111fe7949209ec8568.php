@@ -13,10 +13,14 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>RNT AUTOMATION | RIZTU CORPORATION</title>
 
     <meta name="description" content="" />
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
+    <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(['asset_url' => '/public']); ?>
+
+
 
 
     <!-- Favicon -->
@@ -123,6 +127,9 @@
     <script src="<?php echo e(asset('template/assets/vendor/js/bootstrap.js')); ?>"></script>
     <script src="<?php echo e(asset('template/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')); ?>"></script>
     <script src="<?php echo e(asset('template/assets/vendor/js/menu.js')); ?>"></script>
+
+    <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(['asset_url' => '/public']); ?>
+
 
     <!-- endbuild -->
 
