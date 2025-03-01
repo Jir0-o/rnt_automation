@@ -1,5 +1,5 @@
-
-<?php $__env->startSection('content'); ?>
+@extends('layouts.master')
+@section('content')
 
 <style>
 .specification-column {
@@ -28,28 +28,28 @@
                 <br>
                 <form id="requisitions_submit">
                     <div class="row" id="sharock_name">
-                        <div class="col-12">
-                            <label for="requisition_no">Channal No:</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="requisition_no" id="requisition_no"
-                                    placeholder="Enter Channal No"></input>
-                                <div class="input-group-append" style="margin-left: 5px;">
-                                    <button type='button' class="btn btn-outline-secondary" id="auto-generate-btn"
-                                        title="Auto Generate">
-                                        <i class="fas fa-magic"></i>
-                                        Generate
-                                    </button>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="requisition_no">Order No:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="requisition_no" value="{{ $requisition->order_no }}" id="requisition_no"
+                                        placeholder="Enter Order No" required></input>
+                                    <div class="input-group-append" style="margin-left: 5px;">
+                                        <button type='button' class="btn btn-outline-secondary" id="auto-generate-btn"
+                                            title="Auto Generate">
+                                            <i class="fas fa-magic"></i>
+                                            Generate
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <span class="text-danger" id="requisition_noError"></span>
+                                <span class="text-danger" id="requisition_noError"></span>
+                            </div> 
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
+                        <br>
                         <div class="col-6" >
                             <div class="mb-3">
-                                <label for="requisition_date">Requisition Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" value="<?php echo date('Y-m-d'); ?>" name="requisition_date" id="requisition_date">
+                                <label for="requisition_date">Order Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" value="{{ $requisition->order_date }}" name="requisition_date" id="requisition_date" required>
                                 <span class="text-danger" id="requisition_dateError"></span>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                         <div class="col-6">
                             <div class="mb-3">
                                 <label for="requisition_company">Company <span class="text-danger">*</span></label>
-                                <select id="requisition_company" name="requisition_company" class="form-control">
+                                <select id="requisition_company" name="requisition_company" required class="form-control">
                                 </select>
                                 <span class="text-danger" id="companyError"></span>
                             </div>
@@ -65,53 +65,12 @@
                         <br>
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="buyer_name">Buyer Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="requisition_buyer_name" id="requisition_buyer_name" placeholder="Enter Buyer Name">
-                                <span class="text-danger" id="buyer_nameError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="Category">Product Category</label>
-                                <select id="Category-DropDown" name="Category-DropDown" class="form-control"></select>
-                                <span class="text-danger" id="CategoryError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="address">Address <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="requisition_address" id="requisition_address" placeholder="Enter Address">
-                                <span class="text-danger" id="addressError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="SubCategory">Product Sub Category</label>
-                                <select id="Sub-Category-DropDown" name="Sub-Category-DropDown"
-                                    class="form-control"></select>
-                                <span class="text-danger" id="SubCategoryError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="SrNo">Order No.</label>
-                                <input type="number" id="sr_no" name="sr_no" class="form-control">
-                                <span class="text-danger" id="SubCategoryError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="requisition_type">Challan Type <span class="text-danger">*</span></label>
-                                <select id="requisition_type" name="requisition_type" class="form-control">
-                                    <option disabled selected>Select Challan Type</option>
-                                    <option value="1">Cash Challan</option>
-                                    <option value="2">Loan Challan</option>
-                                    <option value="3">Sample Challan</option>
+                                <label for="requisition_type">Order Type <span class="text-danger">*</span></label>
+                                <select id="requisition_type" name="requisition_type" required class="form-control">
+                                    <option disabled {{ is_null($requisition->order_type) ? 'selected' : '' }}>Select Order Type</option>
+                                    <option value="1" {{ $requisition->order_type == 1 ? 'selected' : '' }}>Cash Order</option>
+                                    <option value="2" {{ $requisition->order_type == 2 ? 'selected' : '' }}>Loan Order</option>
+                                    <option value="3" {{ $requisition->order_type == 3 ? 'selected' : '' }}>Sample Order</option>
                                 </select>
                                 <span class="text-danger" id="requisition_typeError"></span>
                             </div>
@@ -135,102 +94,47 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0" id="Product_Table_data">
                                         <!-- first data will be manually added here -->
-                                        <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        @foreach($products as $product)
                                         <tr>
-                                            <td><?php echo e($loop->iteration); ?></td>
-                                            <td><?php echo e($product->product_name); ?></td>
-                                            <td><?php echo e($product->spec); ?></td>
-                                            <td><?php echo e($product->unitType->name); ?></td>
-                                            <td><?php echo e($product->unit_package_size); ?></td>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $product->product_name }}</td>
+                                            <td>{{ $product->spec }}</td>
+                                            <td>{{ $product->unitType->name }}</td>
+                                            <td>{{ $product->unit_package_size}}</td>
                                             <td>
                                                 <button type="button" class="btn btn-primary addProductBtn"
-                                                    data-id="<?php echo e($product->id); ?>"
-                                                    data-product-name="<?php echo e($product->product_name); ?>"
-                                                    data-price="<?php echo e($product->unit_price); ?>"
-                                                    data-spec="<?php echo e($product->spec); ?>"
-                                                    data-unit-price="<?php echo e($product->unit_price); ?>"
-                                                    data-unit-package-size="<?php echo e($product->unit_package_size); ?>">
+                                                    data-id="{{ $product->id }}"
+                                                    data-product-name="{{ $product->product_name }}"
+                                                    data-price="{{ $product->unit_price }}"
+                                                    data-spec="{{ $product->spec }}"
+                                                    data-unit-price="{{ $product->unit_price }}"
+                                                    data-unit-package-size="{{ $product->unit_package_size }}">
                                                     <i class="bx bx-cart-add"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                     <br>
-                    <!-- //add a button name "Missing" to the top right corner of the page -->
-                    <!-- <div class="float-end">
-                        <button class="btn btn-primary" type="button" id="missing-btn"><i class='bx bx-plus'
-                                style="margin-right: 3px;"></i>Missing</button>
-                    </div> -->
                     <br>
-                    <!-- <br>
-                    <br> -->
-                    <!-- Form that is hidden initially -->
-                    <!-- <div id="missing-form" style="display: none;">
-                        <div>
-                            <h5 class="card-title">Missing Item Form</h5>
-                            <div id="no_requisitions_submit">
-                                <div class="mb-3">
-                                    <label for="productName" class="form-label">Product Name</label>
-                                    <input type="text" class="form-control" id="productName"
-                                        placeholder="Enter product name">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="quantity" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" id="quantity" step="0.001" min="0"
-                                        placeholder="Enter quantity">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="specification" class="form-label">Specification</label>
-                                    <textarea class="form-control" id="specification" rows="3"
-                                        placeholder="Enter specification"> </textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="unitType" class="form-label">Unit Type</label>
-                                    <select class="form-select" id="unitType">
-                                        <option selected>Select Unit Type</option>
-                                        <?php $__currentLoopData = $unitTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unitType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($unitType->id); ?>"><?php echo e($unitType->name); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="note" class="form-label">Note</label>
-                                    <textarea class="form-control" id="note" rows="3"
-                                        placeholder="Add any notes"></textarea>
-                                </div>
-                                <br>
-                                <div class="float-end">
-                                    <button class="btn btn-primary" type="button" id="addMissingProductButton">
-                                        <i class='bx bx-plus' style="margin-left: -7px; margin-right: 3px;"></i>Add
-                                        Missing Product
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                    </div> -->
                     <div class="card card-default" id="requisition_item">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5 class="card-title">Requisitions Items</h5>
+                                    <h5 class="card-title">Order Items</h5>
                                     <div class="table-responsive text-nowrap p-3">
                                         <table id="Temp_Requisitions_Table" class="table">
                                             <thead>
                                                 <tr>
                                                     <th>SL</th>
                                                     <th>Product Name</th>
-                                                    <th>Total Stock</th>
-                                                    <th>Unit &nbsp &nbsp &nbsp</th>
-                                                    <th>Unit Price</th>
+                                                    <th>Order Unit</th>
                                                     <th class="specification-column">Specification</th>
-                                                    <th class="note_column">Package Size</th>
+                                                    <th> Package Size</th>
                                                     <th>Unit Type</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -245,39 +149,10 @@
                         </div>
                     </div>
                     <br>
-                    <!-- <div class="card card-default" id="help">
-                        <div class="card-body">
-                            <br>
-                            <label for="note">চাহিদার শ্রেণী: </label> <br> <br>
-                            <label style="margin-right: 20px;">
-                                <input type="radio" name="category" value="1" required> পণ্য ও সংশ্লিষ্ট
-                                সেবা
-                            </label>
-                            <label style="margin-right: 20px;">
-                                <input type="radio" name="category" value="2" required> কার্য ও ভৌত সেবা
-                            </label>
-                            <label style="margin-right: 20px;">
-                                <input type="radio" name="category" value="3" required> বৃদ্ধিবৃত্তিক সেবা
-                            </label>
-                            <label>
-                                <input type="radio" name="category" value="4" required> অন্যান্য সেবা
-                            </label>
-                            <br>
-                            <br>
-                            <label for="note">ক্রয় পরিকল্পনায় অন্তর্ভুক্ত কিনা: </label> <br> <br>
-                            <label style="margin-right: 20px;">
-                                <input type="radio" name="category_two" value="1" required> অন্তর্ভুক্ত
-                                সেবা
-                            </label>
-                            <label style="margin-right: 20px;">
-                                <input type="radio" name="category_two" value="2" required> অন্তর্ভুক্ত করা প্রয়োজন
-                            </label>
-                        </div>
-                    </div> -->
                     <br>
                     <div class="card card-default" id="requisition-details">
                         <div class="card-body">
-                            <h5 class="card-title">Requisitions Details</h5>
+                            <h5 class="card-title">Orders Details</h5>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tbody>
@@ -307,7 +182,7 @@
 
                                 <!-- Right side "Requisition" button -->
                                 <button class="btn btn-primary" type="button" id="new_requisitions_submit">
-                                    <i class='bx bx-plus' style="margin-left: -7px; margin-right: 3px;"></i>Requisition
+                                    <i class='bx bx-send' style="margin-left: -7px; margin-right: 3px;"></i>Send Order
                                 </button>
                             </div>
                             <br>
@@ -357,9 +232,9 @@
                                 <label for="unitType" class="form-label">Unit Type</label>
                                 <select class="form-select" id="unitType">
                                     <option selected>Select Unit Type</option>
-                                    <?php $__currentLoopData = $unitTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unitType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($unitType->id); ?>"><?php echo e($unitType->name); ?></option>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    @foreach($unitTypes as $unitType)
+                                    <option value="{{ $unitType->id }}">{{ $unitType->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -461,9 +336,9 @@
         //             <label for="unitType" class="form-label">Unit Type</label>
         //             <select class="form-select" id="dynamic_unitType_${randomNumber}">
         //                 <option selected>Select Unit Type</option>
-        //                 <?php $__currentLoopData = $unitTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unitType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        //                 <option value="<?php echo e($unitType->id); ?>"><?php echo e($unitType->name); ?></option>
-        //                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        //                 @foreach($unitTypes as $unitType)
+        //                 <option value="{{ $unitType->id }}">{{ $unitType->name }}</option>
+        //                 @endforeach
         //             </select>
         //         </div>
         //         <div class="mb-3">
@@ -486,201 +361,109 @@
 
         // }
         $(document).ready(function() {
-            $("#missing-btn").click(function() {
-                // $("#requisition-details").toggle(); // This hides/shows the div
-                // $("#sub_category").toggle(); // This hides/shows the div
-                // $("#product").toggle(); // This hides/shows the div
-                // $("#requisition_item").toggle(); // This hides/shows the div
-                // $("#category").toggle(); // This hides/shows the div
-                // $("#requisition_button").toggle(); // This hides/shows the div
-                // $("#help").toggle(); // This hides/shows the div
-                // $("#sharock_name").toggle(); // This hides/shows the div
-                // $("#date").toggle(); // This hides/shows the div
+            // function loadCategory() {
+            //     $.ajax({
+            //         url: "{{ route('product-categories.index') }}",
+            //         type: "GET",
+            //         success: function(response) {
+            //             $('#Category-DropDown').empty();
+            //             $('#Category-DropDown').append(
+            //                 '<option disabled selected>Please a Category </option>');
+            //             response.data.forEach(function(category) {
+            //                 $('#Category-DropDown').append('<option value="' + category.id +
+            //                     '">' +
+            //                     category.product_category_name + '</option>');
+            //             });
+            //         },
+            //         error: function(err) {
+            //             console.log(err);
+            //         }
+            //     });
+            // }
+            // loadCategory();
 
-                // Toggle the missing item form
-                $("#missing-form").toggle(); // Use toggle to show/hide the form
-            });
+            // $('#Category-DropDown').on('change', function() {
+            //     var categoryId = $(this).val();
 
-            //no requisition form submit
-            $('#addMissingProductButton').on('click', function(e) {
-                e.preventDefault();
+            //     $.ajax({
+            //         url: "{{ route('product.category.sub-categories', ':id') }}".replace(':id',
+            //             categoryId),
+            //         type: 'GET',
+            //         success: function(response) {
+            //             console.log(response);
+            //             if (response.status) {
+            //                 $('#Sub-Category-DropDown').empty().append(
+            //                     '<option value="" selected disabled>Select a Sub Category</option>'
+            //                 );
+            //                 response.data.forEach(SubCategory => {
+            //                     $('#Sub-Category-DropDown').append(
+            //                         '<option value="' +
+            //                         SubCategory.id + '">' + SubCategory
+            //                         .product_sub_category_name + '</option>');
+            //                 });
+            //             } else {
+            //                 $('#Sub-Category-DropDown').empty().append(
+            //                     '<option value="" selected disabled>No Sub Category Available</option>'
+            //                 );
+            //                 console.error(response.message);
+            //             }
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error('AJAX request error:', error);
+            //         }
+            //     });
+            // });
 
-                // Disable the submit button to prevent multiple submissions
-                // let submitButton = $(this).find('button[type="submit"]');
-                // submitButton.prop('disabled', true);
+            // $('#Sub-Category-DropDown').on('change', function() {
+            //     var categoryId = $(this).val();
 
-                // Get the form data
-                // var requisition_no = $('#no_requisition_no').val();
-                // var requisition_date = $('#no_requisition_date').val();
-                var product_name = $('#productName').val();
-                var quantity = $('#quantity').val();
-                const spec = CKEDITOR.instances['specification'].getData();
-                var unit_type = $('#unitType').val();
-                var note = $('#note').val();
-                // var category = $('input[name="category"]:checked').val();
-                // var category_two = $('input[name="category_two"]:checked').val();
+            //     $.ajax({
+            //         url: "{{ route('product.category.products', ':id') }}".replace(':id',
+            //             categoryId),
+            //         type: 'GET',
+            //         success: function(response) {
+            //             if (response.status) {
+            //                 $('#Product_Table_data').empty();
+            //                 let serialNo = 1; // Initialize the serial number
+            //                 response.data.forEach(Product => {
+            //                     $('#Product_Table_data').append(`
+            //                         <tr>
+            //                             <td>${serialNo}</td>
+            //                             <td>${Product.product_name}</td>
+            //                             <td>${Product.spec}</td>
+            //                             <td>${Product.unit_type.name}</td>
+            //                             <td>${Product.unit_package_size}</td>
+            //                             <td>
+            //                                 <button type="button" class="btn btn-primary addProductBtn" 
+            //                                     data-id="${Product.id}" 
+            //                                     data-product-name="${Product.product_name}" 
+            //                                     data-price="${Product.unit_price}" 
+            //                                     data-spec="${Product.spec}" 
+            //                                     data-unit-price="${Product.unit_price}" 
+            //                                     data-unit-package-size="${Product.unit_package_size}">
+            //                                     <i class="bx bx-cart-add"></i>
+            //                                 </button>
+            //                             </td>
+            //                         </tr>
+            //                     `);
+            //                     serialNo++; // Increment the serial number
+            //                 });
+            //             } else {
+            //                 $('#Product_Table_data').empty().append(
+            //                     '<tr><td colspan="4">No Product Available</td></tr>');
+            //                 console.error(response.message);
+            //             }
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error('AJAX request error:', error);
+            //         }
+            //     });
+            // });
 
-                // var dynamicValues = [];
-                // $('#append_box_product_content').find('li').each(function(index, element) {
-                //     var dynamicValue = {};
-                //     dynamicValue.product_name = $(this).find('input[id^="dynamic_productName_"]').val();
-
-                //     dynamicValue.quantity = $(this).find('input[id^="dynamic_quantity_"]').val();
-
-                //     dynamicValue.spec = $(this).find('textarea[id^="dynamic_specification_"]').val();
-
-                //     dynamicValue.unit_type = $(this).find('select[id^="dynamic_unitType_"]').val();
-
-                //     dynamicValue.note = $(this).find('textarea[id^="dynamic_note_"]').val();
-
-                //     dynamicValues.push(dynamicValue);
-                // });
-
-                $.ajax({
-                    url: "<?php echo e(route('no.requisitions.add')); ?>",
-                    type: 'POST',
-                    data: {
-                        // requisition_date: requisition_date,
-                        // category: category,
-                        // category_two: category_two,
-                        // requisition_no: requisition_no,
-                        product_name: product_name,
-                        quantity: quantity,
-                        spec: spec,
-                        unit_type: unit_type,
-                        note: note,
-                        // dynamicValues: dynamicValues,
-                        // no_flag: true
-                    },
-                    headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
-                    },
-                    success: function(response) {
-                        if (response.status) {
-                            getTempProduct();
-                            $('#productName').val('');
-                            $('#quantity').val('');
-                            CKEDITOR.instances['specification'].setData('');
-                            $('#unitType').val('');
-                            $('#note').val('');
-
-                        } else {
-                            console.error(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX request error:', error);
-                    },
-                    complete: function() {
-                        // Re-enable the submit button after the request is completed
-                        submitButton.prop('disabled', false);
-                    }
-                });
-            });
-
-            function loadCategory() {
-                $.ajax({
-                    url: "<?php echo e(route('product-categories.index')); ?>",
-                    type: "GET",
-                    success: function(response) {
-                        $('#Category-DropDown').empty();
-                        $('#Category-DropDown').append(
-                            '<option disabled selected>Please a Category </option>');
-                        response.data.forEach(function(category) {
-                            $('#Category-DropDown').append('<option value="' + category.id +
-                                '">' +
-                                category.product_category_name + '</option>');
-                        });
-                    },
-                    error: function(err) {
-                        console.log(err);
-                    }
-                });
-            }
-            loadCategory();
-
-            $('#Category-DropDown').on('change', function() {
-                var categoryId = $(this).val();
-
-                $.ajax({
-                    url: "<?php echo e(route('product.category.sub-categories', ':id')); ?>".replace(':id',
-                        categoryId),
-                    type: 'GET',
-                    success: function(response) {
-                        console.log(response);
-                        if (response.status) {
-                            $('#Sub-Category-DropDown').empty().append(
-                                '<option value="" selected disabled>Select a Sub Category</option>'
-                            );
-                            response.data.forEach(SubCategory => {
-                                $('#Sub-Category-DropDown').append(
-                                    '<option value="' +
-                                    SubCategory.id + '">' + SubCategory
-                                    .product_sub_category_name + '</option>');
-                            });
-                        } else {
-                            $('#Sub-Category-DropDown').empty().append(
-                                '<option value="" selected disabled>No Sub Category Available</option>'
-                            );
-                            console.error(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX request error:', error);
-                    }
-                });
-            });
-
-            $('#Sub-Category-DropDown').on('change', function() {
-                var categoryId = $(this).val();
-
-                $.ajax({
-                    url: "<?php echo e(route('product.category.products', ':id')); ?>".replace(':id',
-                        categoryId),
-                    type: 'GET',
-                    success: function(response) {
-                        if (response.status) {
-                            $('#Product_Table_data').empty();
-                            let serialNo = 1; // Initialize the serial number
-                            response.data.forEach(Product => {
-                                $('#Product_Table_data').append(`
-                                    <tr>
-                                        <td>${serialNo}</td>
-                                        <td>${Product.product_name}</td>
-                                        <td>${Product.spec}</td>
-                                        <td>${Product.unit_type.name}</td>
-                                        <td>${Product.unit_package_size}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary addProductBtn" 
-                                                data-id="${Product.id}" 
-                                                data-product-name="${Product.product_name}" 
-                                                data-price="${Product.unit_price}" 
-                                                data-spec="${Product.spec}" 
-                                                data-unit-price="${Product.unit_price}" 
-                                                data-unit-package-size="${Product.unit_package_size}">
-                                                <i class="bx bx-cart-add"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                `);
-                                serialNo++; // Increment the serial number
-                            });
-                        } else {
-                            $('#Product_Table_data').empty().append(
-                                '<tr><td colspan="4">No Product Available</td></tr>');
-                            console.error(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX request error:', error);
-                    }
-                });
-            });
-
-            const editorInstances = []; // Array to hold CKEditor instances
+            const editorInstances = []; // Array to hold CKEditor instances 
             function getTempProduct() {
                 $.ajax({
-                    url: "<?php echo e(route('temp-requisition-products.index')); ?>",
+                    url: "{{ route('orders.get') }}",
                     type: 'GET',
                     success: function(response) {
                         if (response.status == true) {
@@ -691,23 +474,15 @@
 
                             response.data.forEach(Product => {
                                 const remarks = Product.remarks ??
-                                    ''; // Ensure 'remarks' is not null or undefined
+                                    ''; // Ensure 'remarks' is not null or undefined 
 
                                 $('#Temp_Requisitions_Table_Data').append(
                                     '<tr>' +
                                     '<td>' + serialNo + '</td>' +
                                     '<td>' + Product.product.product_name + '</td>' +
                                     '<td>' +
-                                    '<input type="number" disabled class="form-control final-quantity-input" name="final_quantity" data-id="' +
-                                    Product.product.id + '" value="' + Product.product.final_quantity + '">' +
-                                    '</td>' +
-                                    '<td>' +
                                     '<input type="number" class="form-control quantity-input" name="quantity" data-id="' +
                                     Product.id + '" value="' + Product.quantity + '">' +
-                                    '</td>' +
-                                    '<td>' +
-                                    '<input type="number" class="form-control unit-price-input" name="unit_price" data-id="' +
-                                    Product.id + '" value="' + Product.unit_price + '">' +
                                     '</td>' +
                                     '<td>' +
                                     '<textarea class="form-control spec-input" name="spec-input-temp" data-id="' +
@@ -794,11 +569,11 @@
                         console.log('Specification:', spec);
 
                         $.ajax({
-                            url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
+                            url: "{{ route('temp-requisition-products.update', ':id') }}".replace(':id',
                                 editorObj.productId),
                             type: 'PUT',
                             headers: {
-                                "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
                             },
                             data: {
                                 product_id: editorObj.productId,
@@ -835,10 +610,10 @@
                 var unit_package_size = $(this).data('unit-package-size');
 
                 $.ajax({
-                    url: "<?php echo e(route('temp-requisition-products.store')); ?>",
+                    url: "{{ route('orders.temp') }}",
                     type: 'POST',
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     data: {
                         product_id: productId,
@@ -868,12 +643,12 @@
                 console.log(productId);
 
                 $.ajax({
-                    url: "<?php echo e(route('temp-requisition-products.destroy', ':id')); ?>".replace(
+                    url: "{{ route('temp-requisition-products.destroy', ':id') }}".replace(
                         ':id',
                         productId),
                     type: 'DELETE',
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     success: function(response) {
                         if (response.status) {
@@ -894,11 +669,11 @@
                 var quantity = $(this).val();
 
                 $.ajax({
-                    url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
+                    url: "{{ route('temp-requisition-products.update', ':id') }}".replace(':id',
                         productId),
                     type: 'PUT',
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     data: {
                         product_id: productId,
@@ -922,11 +697,11 @@
                 var unit_package_size = $(this).val();
 
                 $.ajax({
-                    url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
+                    url: "{{ route('temp-requisition-products.update', ':id') }}".replace(':id',
                         productId),
                     type: 'PUT',
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     data: {
                         product_id: productId,
@@ -950,11 +725,11 @@
                 var spec = $(this).val();
 
                 $.ajax({
-                    url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
+                    url: "{{ route('temp-requisition-products.update', ':id') }}".replace(':id',
                         productId),
                     type: 'PUT',
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     data: {
                         product_id: productId,
@@ -978,11 +753,11 @@
                 var unit_price = $(this).val();
 
                 $.ajax({
-                    url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
+                    url: "{{ route('temp-requisition-products.update', ':id') }}".replace(':id',
                         productId),
                     type: 'PUT',
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     data: {
                         product_id: productId,
@@ -1002,7 +777,7 @@
             });
 
             $(document).on('click', '#back_button', function() {
-                window.location.href = "<?php echo e(route('requisitions.create')); ?>";
+                window.location.href = "{{ route('requisitions.create') }}";
             });
 
 
@@ -1011,11 +786,11 @@
                 var note = $(this).val();
 
                 $.ajax({
-                    url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
+                    url: "{{ route('temp-requisition-products.update', ':id') }}".replace(':id',
                         productId),
                     type: 'PUT',
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     data: {
                         product_id: productId,
@@ -1035,81 +810,65 @@
             });
 
             // Submit the requisition
-            $(document).on('click', '#new_requisitions_submit', function(e) {
-                e.preventDefault(); 
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "Do you want to send this requisition for authorization?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Yes",
-                    cancelButtonText: "No",
-                    allowOutsideClick: false,  // Prevent closing by clicking outside
-                    showCloseButton: true      // Show "X" close button
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // If "Yes" is clicked
-                        submitRequisition("<?php echo e(route('requisitions.store')); ?>", false);
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        // If "No" is clicked
-                        submitRequisition("<?php echo e(route('requisitions.noAuth')); ?>", true);
-                    }
-                });
-            });
+            $(document).on('click', '#new_requisitions_submit', function() {
+                // Disable the submit button to prevent multiple submissions
+                let submitButton = $(this).find('button[type="submit"]');
+                submitButton.prop('disabled', true);
 
-            function submitRequisition(route, noFlag) {
-                const data = {
-                    requisition_date: $('#requisition_date').val(),
-                    company_value: $('#requisition_company').val(),
-                    category: $('input[name="category"]:checked').val(),
-                    category_two: $('input[name="category_two"]:checked').val(),
-                    requisition_no: $('#requisition_no').val(),
-                    buyer_name: $('#requisition_buyer_name').val(),
-                    address: $('#requisition_address').val(), 
-                    requisition_type: $('#requisition_type').val(),
-                    sr:$('#sr_no').val(),
-                    no_flag: noFlag
-                };
+                //get id from url
+                var url = window.location.href;
+                var requisition_id = url.substring(url.lastIndexOf('/') + 1);
+                // Clear previous error messages
+                $('#requisition_typeError').text('');
+                $('#requisition_noError').text('');
+                $('#companyError').text('');
+
+                if (!requisition_type || requisition_type === "Select Order Type") {
+                    $('#requisition_typeError').text('Order Type is required.');
+                    return; // Stop the function if validation fails
+                }
+
+                if (requisition_no === "") {
+                    $('#requisition_noError').text('Requisition No is required.');
+                    return; // Stop the function if validation fails
+                }
+
+                if (!requisition_company) {
+                    $('#companyError').text('Company is required.');
+                    return; // Stop the function if validation fails
+                }
 
                 $.ajax({
-                    url: route,
+                    url: "{{ route('orders.update', ':id') }}".replace(':id', requisition_id),
                     type: 'POST',
-                    data: data,
+                    data: {
+                        requisition_date: $('#requisition_date').val(),
+                        category: $('input[name="category"]:checked').val(),
+                        category_two: $('input[name="category_two"]:checked').val(),
+                        requisition_no: $('#requisition_no').val(),
+                        requisition_type: $('#requisition_type').val(),
+                        company_value: $('#requisition_company').val(),
+                        no_flag: true
+                    },
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
-                    success: function (response) {
-                        let message = noFlag 
-                            ? "Requisition approved without authentication." 
-                            : "Requisition sent for approval.";
-
+                    success: function(response) {
                         if (response.status) {
-                            Swal.fire({
-                                title: "Success!",
-                                text: message,
-                                icon: "success",
-                                timer: 2000,
-                                showConfirmButton: true
-                            }).then(() => {
-                                location.href = "<?php echo e(route('requisitions.create')); ?>";
-                            });
+                            window.location.href = "{{ route('orders.index') }}";
                         } else {
-                            Swal.fire({
-                                title: "Error!",
-                                text: response.message || "Something went wrong!",
-                                icon: "error",
-                                confirmButtonText: "OK"
-                            });
+                            console.error(response.message);
                         }
                     },
-                    error: function (xhr) {
-                        if (xhr.responseJSON?.errors?.requisition_no) {
-                            $('#requisition_noError').text(xhr.responseJSON.errors.requisition_no);
-                        }
-                        console.error('AJAX request error:', xhr);
+                    error: function(xhr, status, error) {
+                        console.error('AJAX request error:', error);
+
                     }
+                }).always(function() {
+                    // Re-enable the submit button
+                    submitButton.prop('disabled', false);
                 });
-            }
+            });
 
             // Save Draft requisition
             $('#save_draft_button').on('click', function(e) {
@@ -1119,7 +878,7 @@
                 submitButton.prop('disabled', true);
 
                 $.ajax({
-                    url: "<?php echo e(route('requisitions_draft.save')); ?>",
+                    url: "{{ route('requisitions_draft.save') }}",
                     type: 'POST',
                     data: {
                         requisition_date: $('#requisition_date').val(),
@@ -1134,7 +893,7 @@
                         no_flag: false
                     },
                     headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     success: function(response) {
                         console.log('Response:');
@@ -1150,7 +909,7 @@
                                 backgroundColor: "#228B22",
                                 stopOnFocus: true,
                             }).showToast();
-                            location.href = "<?php echo e(route('requisitions.create')); ?>";
+                            location.href = "{{ route('requisitions.create') }}";
                         } else {
                             console.error(response.message);
                         }
@@ -1169,32 +928,40 @@
                 });
             });
 
-            $('#auto-generate-btn').on('click', function() {
-                $.ajax({
-                    url: "<?php echo e(route('requisitions.generate')); ?>",
-                    type: 'GET',
-                    success: function(data) {
-                        $('#requisition_no').val(data.data);
-                        Toastify({
-                            text: "Requisition Number Generated Successfully",
-                            duration: 3000,
-                            gravity: "top",
-                            position: 'right',
-                            backgroundColor: "#228B22",
-                            stopOnFocus: true,
-                        }).showToast();
-                    },
-                    error: function(xhr) {
-                        $('#requisition_noError').text(
-                            'Error generating requisition number.');
+        $('#auto-generate-btn').on('click', function() {
+            $.ajax({
+                url: "{{ route('order.generate') }}",
+                type: 'GET',
+                dataType: 'json', // Ensure JSON response
+                success: function(response) {
+                    $('#requisition_no').val(response.data);
+                    Toastify({
+                        text: "Order Number Generated Successfully",
+                        duration: 3000,
+                        gravity: "top",
+                        position: 'right',
+                        backgroundColor: "#228B22",
+                        stopOnFocus: true,
+                    }).showToast();
+
+                    if (data && data.status) {
+                        console.log('Order Number:', data.data); // Ensure data.data exists
+                    } else {
+                        console.error('Unexpected Response Format', data);
                     }
-                });
+                },
+                error: function(xhr) {
+                    console.error('AJAX Error:', xhr.responseText); // Log the full error response
+                    $('#requisition_noError').text('Error generating requisition number.');
+                }
             });
+        });
+
 
             //hide
             $('#no_auto-generate-btn').on('click', function() {
                 $.ajax({
-                    url: "<?php echo e(route('requisitions.generate')); ?>",
+                    url: "{{ route('requisitions.generate') }}",
                     type: 'GET',
                     success: function(data) {
                         $('#no_requisition_no').val(data.data);
@@ -1218,11 +985,13 @@
             let companyData = {};
 
             $.ajax({
-                url: "<?php echo e(route('companies.create')); ?>",
+                url: "{{ route('companies.create') }}",
                 type: "GET",
                 success: function(response) {
                     $('#requisition_company').empty(); // Make sure you're targeting the correct ID
                     $('#requisition_company').append('<option disabled selected>Select Company</option>');
+
+                    $('#requisition_company').val(response.company[0].id);
 
                     response.company.forEach(function(company) {
                         $('#requisition_company').append('<option value="' + company.id + '">' + company.name + '</option>');
@@ -1234,20 +1003,29 @@
                 }
             });
 
-            // Update buyer name and address on company selection
-            $('#requisition_company').on('change', function() {
-                let selectedCompanyId = $(this).val();
-                if (companyData[selectedCompanyId]) {
-                    $('#requisition_address').val(companyData[selectedCompanyId].address || '');
-                    $('#requisition_buyer_name').val(companyData[selectedCompanyId].buyer_name || '');
-                    $('#sr_no').val(companyData[selectedCompanyId].sr_no || '');
-                } else {
-                    $('#requisition_address').val('');
-                    $('#requisition_buyer_name').val('');
-                    $('#sr_no').val('');
-                }
-            });
+
+            // //Get order with name route
+            // function getOrders() {
+            //     let url = window.location.pathname;
+            //     let requisitionId = url.substring(url.lastIndexOf('/') + 1);
+            //     $.ajax({
+            //         url: "{{ route('orders.details' , ':id') }}".replace(':id', requisitionId),
+            //         type: 'GET',
+            //         dataType: 'json',
+            //         success: function(response) {
+            //             $('#order_id').empty();
+            //             $('#order_id').append('<option disabled selected>Select Order</option>');
+            //             response.data.forEach(function(order) {
+            //                 $('#order_id').append('<option value="' + order.id + '">' + order.order_no + '</option>');
+            //             });
+            //         },
+            //         error: function(xhr) {
+            //             console.error('AJAX request error:', xhr.responseText);
+            //         }
+            //     });
+            // }
+
+            // getOrders();
         });
         </script>
-        <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\RNT Automation\resources\views/backend/requisitions/requisitions_add.blade.php ENDPATH**/ ?>
+        @endsection

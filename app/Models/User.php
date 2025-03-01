@@ -155,4 +155,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DefaultCommittee::class, 'chairman', 'id');
     }
+
+    public function order()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

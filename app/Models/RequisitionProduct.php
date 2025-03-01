@@ -19,7 +19,7 @@ class RequisitionProduct extends Model
         'unit_price',
         'unit_package_size',
         'remarks',
-    ];
+    ]; 
 
     public function requisition()
     {

@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('content'); ?>
 <style>
     body {
@@ -159,7 +160,7 @@
                         </tr>
                         <tr>
                             <td style="border-bottom: 1px solid black; padding: 0px 0px 0px 5px;">
-                                <strong>S.R No: <span id="requisitionNo"><?php echo e($requisition->sr_no); ?></span></strong> <!-- Add here -->
+                                <strong>Order No: <span id="requisitionNo"><?php echo e($requisition->sr_no); ?></span></strong> <!-- Add here -->
                             </td>
                         </tr>
                         <tr>
@@ -321,7 +322,7 @@
             <?php endif; ?>
 
             <!-- Right side container for the Send button -->
-            <?php if($requisition->status == 11): ?>
+            <?php if($requisition->status == 11 || $requisition->status == 12 || $requisition->status == 13): ?>
             <div>
                 <button type="button" class="btn btn-success sendRequisitionBtn" data-id="<?php echo e($requisition->id); ?>"
                     style="margin-right: 20px;">
@@ -329,7 +330,7 @@
                 </button>
             </div>
             <?php endif; ?>
-            <?php if($requisition->status == 12): ?>
+            <?php if($requisition->status == 12 || $requisition->status == 13 || $requisition->status == 11): ?>
             <button type="button" class="btn btn-warning editReturnRequisitionBtn" data-id="<?php echo e($requisition->id); ?>" style="margin-right:5px;">
             <i class="bx bx-edit me-1"></i> Edit
             </button> 
@@ -340,6 +341,12 @@
             <div class="right-side" id="auth">
             </div>
             <?php endif; ?>
+            <a href="<?php echo e(route('requisitions.print', $requisition->id)); ?>" class=""
+                target="_blank">
+                <button class="btn btn-info">
+                    <i class="bx bx-printer me-1"></i> Print
+                </button>
+            </a>
         </div>
         
 

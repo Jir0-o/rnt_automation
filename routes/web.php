@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CostTypeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TransactionController;
 use App\Models\ReceivedProduct;
 use Illuminate\Support\Facades\Route;
@@ -162,6 +163,7 @@ Route::middleware([
     Route::resource('daily-costs', DailyCostController::class);
     Route::resource('cost-types', CostTypeController::class);
     Route::resource('transactions', TransactionController::class);
+    Route::resource('orders', OrderController::class);
 
     //cost management
     Route::get('/get-cost-types', [DailyCostController::class, 'getCostTypes'])->name('get-cost-types');
@@ -411,5 +413,17 @@ Route::middleware([
     Route::post('/debit-authorisations/return/{id}', [InitiatorFileController::class, 'debitAuthorisationReturn'])->name('debit.authorisations.return');
     Route::get('/debit-authorisations/edit/{id}', [InitiatorFileController::class, 'debitAuthorisationEdit'])->name('debit.authorisations.edit');
     Route::get('/print-data/{id}', [InitiatorFileController::class, 'getPrintData'])->name('debit.authorisations.print');
+
+    //orders Route
+    Route::get('/order-generate', [OrderController::class, 'orderGenerate'])->name('order.generate');
+    Route::get('/order/print/{id}', [OrderController::class, 'orderPrint'])->name('order.print');
+    Route::post('/order/accept/{id}', [OrderController::class, 'orderAccept'])->name('orders.accept');
+    Route::post('/order/reject/{id}', [OrderController::class, 'orderReject'])->name('orders.reject');
+    Route::post('/order/return/{id}', [OrderController::class, 'returnOrder'])->name('orders.return');
+    Route::post('/order/temp', [OrderController::class, 'TempOrderstore'])->name('orders.temp');
+    Route::get('/order/edit/{id}', [OrderController::class, 'editOrder'])->name('orders.edit');
+    Route::get('/order/get', [OrderController::class, 'getTempOrder'])->name('orders.get');
+    Route::get('/order/details/{id}', [OrderController::class, 'orderDetails'])->name('orders.details');
+    Route::post('/order/update/{id}', [OrderController::class, 'updateOrder'])->name('orders.update');
 
 });

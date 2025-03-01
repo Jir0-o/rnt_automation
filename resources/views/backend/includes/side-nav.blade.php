@@ -419,6 +419,28 @@
                 </li>
                 @endcan
 
+                <li class="menu-header small text-uppercase">
+                    <span class="menu-header-text">Order Section</span>
+                </li>
+                
+                <li class="menu-item all_item {{ request()->is('orders') || request()->is('orders') ? 'open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bxs-wallet"></i>
+                        <div data-i18n="Layouts">Order Details</div>
+                        <span class="badge bg-danger ms-auto"></span>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item {{ request()->is('orders') ? 'active' : '' }}">
+                            <a href="{{route('orders.index')}}" class="menu-link">
+                                <div data-i18n="report">
+                                    All Orders
+                                </div>
+                                <span class="badge bg-danger ms-auto"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 @can('Can Access Report')
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Report Section</span>

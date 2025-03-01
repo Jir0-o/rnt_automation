@@ -3,12 +3,12 @@
 
 <style>
 .specification-column {
-    width: 450px;
+    width: 250px;
     /* Adjust the width as needed */
 }
 
 .note_column {
-    width: 350px;
+    width: 250px;
     /* Adjust the width as needed */
 }
 
@@ -28,85 +28,51 @@
                 <br>
                 <form id="requisitions_submit">
                     <div class="row" id="sharock_name">
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label for="requisition_no">Channal No:</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="requisition_no" value="<?php echo e($requisition->requisition_no); ?>" id="requisition_no"
-                                        placeholder="Enter Channal No"> </input>
-                                </div>
-                                <span class="text-danger" id="requisition_noError"></span>
-                            </div>
-                        </div> 
-                        <br>
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="requisition_date">Requisition Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" name="requisition_date" value="<?php echo e($requisition->requisition_date); ?>" id="requisition_date">
+                                <label for="requisition_no">Order No:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="requisition_no" id="requisition_no"
+                                        placeholder="Enter Order No" required></input>
+                                    <div class="input-group-append" style="margin-left: 5px;">
+                                        <button type='button' class="btn btn-outline-secondary" id="auto-generate-btn"
+                                            title="Auto Generate">
+                                            <i class="fas fa-magic"></i>
+                                            Generate
+                                        </button>
+                                    </div>
+                                </div>
+                                <span class="text-danger" id="requisition_noError"></span>
+                            </div> 
+                        </div>
+                        <br>
+                        <div class="col-6" >
+                            <div class="mb-3">
+                                <label for="requisition_date">Order Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" value="<?php echo date('Y-m-d'); ?>" name="requisition_date" id="requisition_date" required>
                                 <span class="text-danger" id="requisition_dateError"></span>
                             </div>
                         </div>
                         <br>
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="edit_requisition_company">Company <span class="text-danger">*</span></label>
-                                <select id="edit_requisition_company" name="edit_requisition_company" class="form-control">
+                                <label for="requisition_company">Company <span class="text-danger">*</span></label>
+                                <select id="requisition_company" name="requisition_company" required class="form-control">
                                 </select>
-                                <input type="hidden" id="edit_requisition_company_id" value="<?php echo e($requisition->company_id); ?>">
-                                <span class="text-danger" id="editCompanyError"></span>
-                            </div>
-                        </div>                        
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="buyer_name">Buyer Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="requisition_buyer_name" value="<?php echo e($requisition->buyer_name); ?>" id="requisition_buyer_name" placeholder="Enter Buyer Name">
-                                <span class="text-danger" id="buyer_nameError"></span>
+                                <span class="text-danger" id="companyError"></span>
                             </div>
                         </div>
                         <br>
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="buyer_address">Buyer Address <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="requisition_address" value="<?php echo e($requisition->address); ?>" id="requisition_address" placeholder="Enter Buyer Address">
-                                <span class="text-danger" id="buyer_addressError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="requisition_type">Requisition Type <span class="text-danger">*</span></label>
-                                <select class="form-select" name="requisition_type" id="requisition_type">
-                                    <option value="1" <?php echo e($requisition->requisition_type == 1 ? 'selected' : ''); ?>>Cash Challan</option>
-                                    <option value="2" <?php echo e($requisition->requisition_type == 2 ? 'selected' : ''); ?>>Loan Challan</option>
-                                    <option value="3" <?php echo e($requisition->requisition_type == 3 ? 'selected' : ''); ?>>Sample Challan</option>
+                                <label for="requisition_type">Order Type <span class="text-danger">*</span></label>
+                                <select id="requisition_type" name="requisition_type" required class="form-control">
+                                    <option disabled selected>Select Order Type</option>
+                                    <option value="1">Cash Order</option>
+                                    <option value="2">Loan Order</option>
+                                    <option value="3">Sample Order</option>
                                 </select>
-                                <span class="text-danger" id="requisitionTypeError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="Category">Product Category <span class="text-danger">*</span></label>
-                                <select id="Category-DropDown" name="Category-DropDown" class="form-control"></select>
-                                <span class="text-danger" id="CategoryError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="SubCategory">Product Sub Category <span class="text-danger">*</span></label>
-                                <select id="Sub-Category-DropDown" name="Sub-Category-DropDown"
-                                    class="form-control"></select>
-                                <span class="text-danger" id="SubCategoryError"></span>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="SrNo">Order No.</label>
-                                <input type="number" id="sr_no" name="sr_no" value="<?php echo e($requisition->sr_no); ?>" class="form-control">
-                                <span class="text-danger" id="SubCategoryError"></span>
+                                <span class="text-danger" id="requisition_typeError"></span>
                             </div>
                         </div>
                     </div>
@@ -154,26 +120,21 @@
                         </div>
                     </div>
                     <br>
-                    <!-- //add a button name "Missing" to the top right corner of the page -->
-                    <br>
-                    <br>
                     <br>
                     <div class="card card-default" id="requisition_item">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5 class="card-title">Requisitions Items</h5> 
+                                    <h5 class="card-title">Requisitions Items</h5>
                                     <div class="table-responsive text-nowrap p-3">
                                         <table id="Temp_Requisitions_Table" class="table">
                                             <thead>
                                                 <tr>
                                                     <th>SL</th>
                                                     <th>Product Name</th>
-                                                    <th>Total Stock</th>
-                                                    <th>Unit &nbsp &nbsp &nbsp</th>
-                                                    <th>Unit Price</th>
+                                                    <th>Order Unit</th>
                                                     <th class="specification-column">Specification</th>
-                                                    <th class="note_column">Package Size</th>
+                                                    <th> Package Size</th>
                                                     <th>Unit Type</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -187,7 +148,7 @@
                             </div>
                         </div>
                     </div>
-                    <br>                   
+                    <br>
                     <br>
                     <div class="card card-default" id="requisition-details">
                         <div class="card-body">
@@ -202,6 +163,7 @@
                                     </tbody>
                                 </table>
                             </div>
+
                             <br>
 
                             <!-- Button Container with flexbox -->
@@ -212,17 +174,16 @@
                                     Back
                                 </button>
 
-                                <?php if($requisition->status == 12 || $requisition->status == 13 || $requisition->status == 11): ?>
+
                                 <!-- Middle "Save Draft" button -->
-                                <button class="btn btn-warning mx-auto" type="button" id="saveRequisitions_submit"><i
+                                <button class="btn btn-warning mx-auto" type="button" id="save_draft_button"><i
                                         class='bx bx-save' style="margin-left: -7px; margin-right: 3px;"></i>Save
                                     Draft</button>
-                                
-                                <?php endif; ?>
+
                                 <!-- Right side "Requisition" button -->
-                                <button class="btn btn-primary" type="submit" id="new_requisitions_submit"><i
-                                        class='bx bx-plus'
-                                        style="margin-left: -7px; margin-right: 3px;"></i>Send Requisition</button>
+                                <button class="btn btn-primary" type="button" id="new_requisitions_submit">
+                                    <i class='bx bx-plus' style="margin-left: -7px; margin-right: 3px;"></i>Requisition
+                                </button>
                             </div>
                             <br>
 
@@ -339,10 +300,6 @@
         CKEDITOR.replace('note_details');
         CKEDITOR.replace('spec');
         CKEDITOR.replace('specification');
-        // CKEDITOR.replace('note');
-        CKEDITOR.replace('spec-input');
-        CKEDITOR.replace('note-input');
-
         </script>
 
 
@@ -404,257 +361,149 @@
 
         // }
         $(document).ready(function() {
-            $("#missing-btn").click(function() {
-                // $("#requisition-details").toggle(); // This hides/shows the div
-                // $("#sub_category").toggle(); // This hides/shows the div
-                // $("#product").toggle(); // This hides/shows the div
-                // $("#requisition_item").toggle(); // This hides/shows the div
-                // $("#category").toggle(); // This hides/shows the div
-                // $("#requisition_button").toggle(); // This hides/shows the div
-                // $("#help").toggle(); // This hides/shows the div
-                // $("#sharock_name").toggle(); // This hides/shows the div
-                // $("#date").toggle(); // This hides/shows the div
+            // function loadCategory() {
+            //     $.ajax({
+            //         url: "<?php echo e(route('product-categories.index')); ?>",
+            //         type: "GET",
+            //         success: function(response) {
+            //             $('#Category-DropDown').empty();
+            //             $('#Category-DropDown').append(
+            //                 '<option disabled selected>Please a Category </option>');
+            //             response.data.forEach(function(category) {
+            //                 $('#Category-DropDown').append('<option value="' + category.id +
+            //                     '">' +
+            //                     category.product_category_name + '</option>');
+            //             });
+            //         },
+            //         error: function(err) {
+            //             console.log(err);
+            //         }
+            //     });
+            // }
+            // loadCategory();
 
-                // Toggle the missing item form
-                $("#missing-form").toggle(); // Use toggle to show/hide the form
-            });
+            // $('#Category-DropDown').on('change', function() {
+            //     var categoryId = $(this).val();
 
-            //no requisition form submit
-            $('#addMissingProductButton').on('click', function(e) {
-                e.preventDefault();
+            //     $.ajax({
+            //         url: "<?php echo e(route('product.category.sub-categories', ':id')); ?>".replace(':id',
+            //             categoryId),
+            //         type: 'GET',
+            //         success: function(response) {
+            //             console.log(response);
+            //             if (response.status) {
+            //                 $('#Sub-Category-DropDown').empty().append(
+            //                     '<option value="" selected disabled>Select a Sub Category</option>'
+            //                 );
+            //                 response.data.forEach(SubCategory => {
+            //                     $('#Sub-Category-DropDown').append(
+            //                         '<option value="' +
+            //                         SubCategory.id + '">' + SubCategory
+            //                         .product_sub_category_name + '</option>');
+            //                 });
+            //             } else {
+            //                 $('#Sub-Category-DropDown').empty().append(
+            //                     '<option value="" selected disabled>No Sub Category Available</option>'
+            //                 );
+            //                 console.error(response.message);
+            //             }
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error('AJAX request error:', error);
+            //         }
+            //     });
+            // });
 
-                // Disable the submit button to prevent multiple submissions
-                let submitButton = $(this).find('button[type="submit"]');
-                submitButton.prop('disabled', true);
+            // $('#Sub-Category-DropDown').on('change', function() {
+            //     var categoryId = $(this).val();
 
-                // Get the form data
-                // var requisition_no = $('#no_requisition_no').val();
-                // var requisition_date = $('#no_requisition_date').val();
-                var product_name = $('#productName').val();
-                var quantity = $('#quantity').val();
-                const spec = CKEDITOR.instances['specification'].getData();
-                var unit_type = $('#unitType').val();
-                var note = $('#note').val();
-                // var category = $('input[name="category"]:checked').val();
-                // var category_two = $('input[name="category_two"]:checked').val();
+            //     $.ajax({
+            //         url: "<?php echo e(route('product.category.products', ':id')); ?>".replace(':id',
+            //             categoryId),
+            //         type: 'GET',
+            //         success: function(response) {
+            //             if (response.status) {
+            //                 $('#Product_Table_data').empty();
+            //                 let serialNo = 1; // Initialize the serial number
+            //                 response.data.forEach(Product => {
+            //                     $('#Product_Table_data').append(`
+            //                         <tr>
+            //                             <td>${serialNo}</td>
+            //                             <td>${Product.product_name}</td>
+            //                             <td>${Product.spec}</td>
+            //                             <td>${Product.unit_type.name}</td>
+            //                             <td>${Product.unit_package_size}</td>
+            //                             <td>
+            //                                 <button type="button" class="btn btn-primary addProductBtn" 
+            //                                     data-id="${Product.id}" 
+            //                                     data-product-name="${Product.product_name}" 
+            //                                     data-price="${Product.unit_price}" 
+            //                                     data-spec="${Product.spec}" 
+            //                                     data-unit-price="${Product.unit_price}" 
+            //                                     data-unit-package-size="${Product.unit_package_size}">
+            //                                     <i class="bx bx-cart-add"></i>
+            //                                 </button>
+            //                             </td>
+            //                         </tr>
+            //                     `);
+            //                     serialNo++; // Increment the serial number
+            //                 });
+            //             } else {
+            //                 $('#Product_Table_data').empty().append(
+            //                     '<tr><td colspan="4">No Product Available</td></tr>');
+            //                 console.error(response.message);
+            //             }
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error('AJAX request error:', error);
+            //         }
+            //     });
+            // });
 
-                // var dynamicValues = [];
-                // $('#append_box_product_content').find('li').each(function(index, element) {
-                //     var dynamicValue = {};
-                //     dynamicValue.product_name = $(this).find('input[id^="dynamic_productName_"]').val();
-
-                //     dynamicValue.quantity = $(this).find('input[id^="dynamic_quantity_"]').val();
-
-                //     dynamicValue.spec = $(this).find('textarea[id^="dynamic_specification_"]').val();
-
-                //     dynamicValue.unit_type = $(this).find('select[id^="dynamic_unitType_"]').val();
-
-                //     dynamicValue.note = $(this).find('textarea[id^="dynamic_note_"]').val();
-
-                //     dynamicValues.push(dynamicValue);
-                // });
-
-                $.ajax({
-                    url: "<?php echo e(route('edit.no.requisitions.add')); ?>",
-                    type: 'POST',
-                    data: {
-                        // requisition_date: requisition_date,
-                        // category: category,
-                        // category_two: category_two,
-                        // requisition_no: requisition_no,
-                        product_name: product_name,
-                        quantity: quantity,
-                        spec: spec,
-                        unit_type: unit_type,
-                        note: note,
-                        // dynamicValues: dynamicValues,
-                        // no_flag: true
-                    },
-                    headers: {
-                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
-                    },
-                    success: function(response) {
-                        if (response.status) {
-                            getTempProduct();
-                            $('#productName').val('');
-                            $('#quantity').val('');
-                            CKEDITOR.instances['specification'].setData('');
-                            $('#unitType').val('');
-                            $('#note').val('');
-
-                        } else {
-                            console.error(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX request error:', error);
-                    },
-                    complete: function() {
-                        // Re-enable the submit button after the request is completed
-                        submitButton.prop('disabled', false);
-                    }
-                });
-            });
-
-            function loadCategory() {
-                $.ajax({
-                    url: "<?php echo e(route('product-categories.index')); ?>",
-                    type: "GET",
-                    success: function(response) {
-                        $('#Category-DropDown').empty();
-                        $('#Category-DropDown').append(
-                            '<option disabled selected>Please a Category </option>');
-                        response.data.forEach(function(category) {
-                            $('#Category-DropDown').append('<option value="' + category.id +
-                                '">' +
-                                category.product_category_name + '</option>');
-                        });
-                    },
-                    error: function(err) {
-                        console.log(err);
-                    }
-                });
-            }
-            loadCategory();
-
-            $('#Category-DropDown').on('change', function() {
-                var categoryId = $(this).val();
-
-                $.ajax({
-                    url: "<?php echo e(route('product.category.sub-categories', ':id')); ?>".replace(':id',
-                        categoryId),
-                    type: 'GET',
-                    success: function(response) {
-                        console.log(response);
-                        if (response.status) {
-                            $('#Sub-Category-DropDown').empty().append(
-                                '<option value="" selected disabled>Select a Sub Category</option>'
-                            );
-                            response.data.forEach(SubCategory => {
-                                $('#Sub-Category-DropDown').append(
-                                    '<option value="' +
-                                    SubCategory.id + '">' + SubCategory
-                                    .product_sub_category_name + '</option>');
-                            });
-                        } else {
-                            $('#Sub-Category-DropDown').empty().append(
-                                '<option value="" selected disabled>No Sub Category Available</option>'
-                            );
-                            console.error(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX request error:', error);
-                    }
-                });
-            });
-
-            $('#Sub-Category-DropDown').on('change', function() {
-                var categoryId = $(this).val();
-
-                $.ajax({
-                    url: "<?php echo e(route('product.category.products', ':id')); ?>".replace(':id',
-                        categoryId),
-                    type: 'GET',
-                    success: function(response) {
-                        if (response.status) {
-                            $('#Product_Table_data').empty();
-                            let serialNo = 1; // Initialize the serial number
-                            response.data.forEach(Product => {
-                                $('#Product_Table_data').append(`
-                                    <tr>
-                                        <td>${serialNo}</td>
-                                        <td>${Product.product_name}</td>
-                                        <td>${Product.spec}</td>
-                                        <td>${Product.unit_type.name}</td>
-                                        <td>${Product.unit_package_size}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary addProductBtn" 
-                                                data-id="${Product.id}" 
-                                                data-product-name="${Product.product_name}" 
-                                                data-price="${Product.unit_price}" 
-                                                data-spec="${Product.spec}" 
-                                                data-unit-price="${Product.unit_price}" 
-                                                data-unit-package-size="${Product.unit_package_size}">
-                                                <i class="bx bx-cart-add"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                `);
-                                serialNo++; // Increment the serial number
-                            });
-                        } else {
-                            $('#Product_Table_data').empty().append(
-                                '<tr><td colspan="4">No Product Available</td></tr>');
-                            console.error(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX request error:', error);
-                    }
-                });
-            });
-
-            const editorInstances = []; // Array to hold CKEditor instances
+            const editorInstances = []; // Array to hold CKEditor instances 
             function getTempProduct() {
                 $.ajax({
-                    url: "<?php echo e(route('temprequisitions.add')); ?>", 
+                    url: "<?php echo e(route('orders.get')); ?>",
                     type: 'GET',
                     success: function(response) {
                         if (response.status == true) {
                             $('#Temp_Requisitions_Table_Data').empty();
                             let serialNo = 1; // Initialize the serial number
-
-                            // Store unitTypes for later use
-                            const unitTypes = response.unitTypes;
+                            let randomNumber = String(Math.floor(Math.random() * (98765 - 12345 +
+                                1)) + 5);
 
                             response.data.forEach(Product => {
-                                const remarks = Product.remarks ?? ''; // Ensure 'remarks' is not null or undefined
+                                const remarks = Product.remarks ??
+                                    ''; // Ensure 'remarks' is not null or undefined 
 
-                                let unitTypeOptions = '';
-                                unitTypes.forEach(unitType => {
-                                    const isSelected = (unitType.id === Product.unit_type) ? 'selected' : ''; 
-                                    unitTypeOptions += `<option value="${unitType.id}" ${isSelected}>${unitType.name}</option>`;
-                                });
-
-                                // Append the row to the table
                                 $('#Temp_Requisitions_Table_Data').append(
                                     '<tr>' +
                                     '<td>' + serialNo + '</td>' +
                                     '<td>' + Product.product.product_name + '</td>' +
                                     '<td>' +
-                                    '<input type="number" disabled class="form-control final-quantity-input" name="final_quantity" data-id="' +
-                                    Product.product.id + '" value="' + Product.product.final_quantity + '">' +
-                                    '</td>' +
-                                    '<td>' +
                                     '<input type="number" class="form-control quantity-input" name="quantity" data-id="' +
                                     Product.id + '" value="' + Product.quantity + '">' +
                                     '</td>' +
                                     '<td>' +
-                                    '<input type="number" class="form-control unit-price-input" name="unit_price" data-id="' +
-                                    Product.id + '" value="' + Product.unit_price + '">' +
-                                    '</td>' +
-                                    '<td>' +
                                     '<textarea class="form-control spec-input" name="spec-input-temp" data-id="' +
-                                    Product.id + '" cols="20" rows="6">' + Product.spec +
+                                    Product.id + '" cols="20" rows="6">' + Product
+                                    .spec +
                                     '</textarea>' +
                                     '</td>' +
                                     '<td>' +
                                     '<input type="number" class="form-control unit-package-size-input" name="unit_package_size" data-id="' +
                                     Product.id + '" value="' + Product.unit_package_size + '">' +
                                     '</td>' +
-                                    '<td>' +
-                                    '<select class="form-control unit-type-select" data-id="' + Product.id + '">' +
-                                    unitTypeOptions +
-                                    '</select>' +
-                                    '</td>' +
+                                    '<td>' + Product.product.unit_type.name + '</td>' +
                                     // '<td>' +
-                                    // '<textarea class="form-control note-input" name="note-input" data-id="' + Product.id + '" cols="20" rows="6">' + remarks +
+                                    // '<textarea class="form-control note-input" data-id="' +
+                                    // Product.id + '" cols="20" rows="6">' + remarks +
                                     // '</textarea>' +
                                     // '</td>' +
                                     '<td>' +
                                     '<button type="button" class="btn removeProductBtn" data-id="' +
-                                    Product.id + '"><i class="bx bx-trash text-danger"></i></button>' +
+                                    Product.id +
+                                    '"><i class="bx bx-trash text-danger"></i></button>' +
                                     '</td>' +
                                     '</tr>'
                                 );
@@ -673,17 +522,20 @@
                                     resize_enabled: false,
                                 });
 
-                                // Store the editor instance in the array
-                                    editorInstances.push({ instance: editorInstance, productId: Product.id });
-                                });
+                            // Store the editor instance in the array
+                            editorInstances.push({ instance: editorInstance, productId: Product.id });
+                            });
+                            //show the total quantity of items
+                            // $('#totalQuantityLabel').text('Quantity of ' + response.data.length + ' Item');
 
                             // Calculate the total quantity
                             var totalQuantity = response.data.reduce(function(acc, product) {
-                                return acc + parseFloat(product.quantity, 3); // Ensure quantity is treated as a float
+                                return acc + parseFloat(product.quantity,
+                                    3); // Ensure quantity is treated as an integer
                             }, 0);
 
-                                // Add event listener for quantity input validation
-                                $('.quantity-input').on('input', function() {
+                            // Add event listener for quantity input validation
+                            $('.quantity-input').on('input', function() {
                                 const finalQuantity = $(this).closest('tr').find('.final-quantity-input').val();
                                 const enteredQuantity = $(this).val();
 
@@ -694,9 +546,11 @@
                             });
 
                             $('#itemQuantityValue').text(totalQuantity);
+
+
                         } else if (response.status == false) {
                             $('#Temp_Requisitions_Table_Data').empty().append(
-                                '<tr><td colspan="7">No Product Available</td></tr>');
+                                '<tr><td colspan="4">No Product Available</td></tr>');
                             console.error(response.message);
                         }
                     },
@@ -704,11 +558,10 @@
                         console.error('AJAX request error:', error);
                     }
                 });
-
             }
 
-             // Attach the 'blur' event to each CKEditor instance
-             function attachCKEditorBlurEvents() {
+               // Attach the 'blur' event to each CKEditor instance
+               function attachCKEditorBlurEvents() {
                 editorInstances.forEach(editorObj => {
                     editorObj.instance.on('blur', function() {
                         var spec = this.getData(); // Get updated data from CKEditor after blur
@@ -746,9 +599,8 @@
                 attachCKEditorBlurEvents();
             });
 
-            // Call the function to load the data and initialize CKEditors
             getTempProduct();
-
+            
             $('#Product_Table').on('click', '.addProductBtn', function() {
                 var productId = $(this).data('id');
                 var productName = $(this).data('product-name');
@@ -758,7 +610,7 @@
                 var unit_package_size = $(this).data('unit-package-size');
 
                 $.ajax({
-                    url: "<?php echo e(route('temprequisitions.store')); ?>",
+                    url: "<?php echo e(route('orders.temp')); ?>",
                     type: 'POST',
                     headers: {
                         "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
@@ -773,6 +625,7 @@
                         unit_package_size: unit_package_size
                     },
                     success: function(response) {
+
                         if (response.status) {
                             getTempProduct();
                         } else {
@@ -814,9 +667,6 @@
             $('#Temp_Requisitions_Table').on('change', '.quantity-input', function() {
                 var productId = $(this).data('id');
                 var quantity = $(this).val();
-
-                console.log('Product ID:', productId);
-                console.log('Quantity:', quantity);
 
                 $.ajax({
                     url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
@@ -870,9 +720,9 @@
                 });
             });
 
-            $('#Temp_Requisitions_Table').on('change', '.unit-price-input', function() {
+            $('#Temp_Requisitions_Table').on('change', '.spec-input', function() {
                 var productId = $(this).data('id');
-                var unit_price = $(this).val();
+                var spec = $(this).val();
 
                 $.ajax({
                     url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
@@ -883,7 +733,7 @@
                     },
                     data: {
                         product_id: productId,
-                        unit_price: unit_price
+                        spec: spec
                     },
                     success: function(response) {
                         if (response.status) {
@@ -898,9 +748,9 @@
                 });
             });
 
-            $('#Temp_Requisitions_Table').on('change', '.unit-type-select', function() {
+            $('#Temp_Requisitions_Table').on('change', '.unit-price-input', function() {
                 var productId = $(this).data('id');
-                var unit_type = $(this).val();
+                var unit_price = $(this).val();
 
                 $.ajax({
                     url: "<?php echo e(route('temp-requisition-products.update', ':id')); ?>".replace(':id',
@@ -911,7 +761,7 @@
                     },
                     data: {
                         product_id: productId,
-                        unit_type: unit_type
+                        unit_price: unit_price
                     },
                     success: function(response) {
                         if (response.status) {
@@ -959,270 +809,63 @@
                 });
             });
 
-        // Submit the requisition
-        $(document).on('click', '#new_requisitions_submit', function (e) {
-            e.preventDefault();
-
-            let submitButton = $(this); // Ensure correct button selection
-            submitButton.prop('disabled', true);
-
-            let url = window.location.pathname;
-            let requisitionId = url.substring(url.lastIndexOf('/') + 1);
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Do you want to send this return requisition for authorization?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
-                allowOutsideClick: false,
-                showCloseButton: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If "Yes" is clicked
-                    submitRequisition("<?php echo e(route('editReturnRequisition.Submit', ':id')); ?>".replace(':id', requisitionId), false);
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // If "No" is clicked
-                    submitRequisition("<?php echo e(route('editReturnRequisition.noAuth', ':id')); ?>".replace(':id', requisitionId), true);
-                }
-            }).finally(() => {
-                submitButton.prop('disabled', false); // Re-enable button after confirmation
-            });
-        });
-
-        // Function to submit requisition via AJAX
-        function submitRequisition(route, noFlag) {
-            const data = {
-                requisition_date: $('#requisition_date').val(),
-                category: $('input[name="category"]:checked').val(),
-                category_two: $('input[name="category_two"]:checked').val(),
-                requisition_no: $('#requisition_no').val(),
-                unit_type: $('input[name="unit_type"]:checked').val(),
-                buyer_name: $('#requisition_buyer_name').val(),
-                address: $('#requisition_address').val(),
-                requisition_type: $('#requisition_type').val(),
-                company_value: $('#edit_requisition_company').val(),
-                sr: $('#sr_no').val(),
-                no_flag: noFlag
-            };
-
-            $.ajax({
-                url: route,
-                type: 'PUT',
-                data: data,
-                headers: {
-                    "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>"
-                },
-                success: function (response) {
-                    console.log('response', response);
-                    let message = noFlag
-                        ? "Requisition approved without authentication."
-                        : "Requisition sent for approval.";
-
-                    Swal.fire({
-                        title: "Success!",
-                        text: message,
-                        icon: "success",
-                        timer: 2000,
-                        showConfirmButton: true
-                    }).then(() => {
-                        // location.href = "<?php echo e(route('requisitions.create')); ?>"; // Redirect after success
-                    });
-                },
-                error: function (xhr) {
-                    if (xhr.responseJSON?.errors?.requisition_no) {
-                        $('#requisition_noError').text(xhr.responseJSON.errors.requisition_no);
-                    }
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Something went wrong. Please try again.",
-                        icon: "error",
-                        confirmButtonText: "OK"
-                    });
-                    console.error('AJAX request error:', xhr);
-                }
-            });
-        }
-
-
-            // // Submit the requisition
-            // $('#requisitions_submit').on('submit', function(e) {
-            //     e.preventDefault();
-                
-            //     let submitButton = $(this).find('button[type="submit"]');
-            //     submitButton.prop('disabled', true);
-            //     let url = window.location.pathname;
-            //     let requisitionId = url.substring(url.lastIndexOf('/') + 1);
-
-            //     $.ajax({
-            //         url: "<?php echo e(route('editReturnRequisition.Submit', ':id')); ?>".replace(':id', requisitionId), 
-            //         type: 'PUT', 
-            //         data: {
-            //             requisition_date: $('#requisition_date').val(),
-            //             category: $('input[name="category"]:checked').val(),
-            //             category_two: $('input[name="category_two"]:checked').val(),
-            //             requisition_no: $('#requisition_no').val(),
-            //             unit_type: $('input[name="unit_type"]:checked').val(),
-            //             buyer_name: $('#requisition_buyer_name').val(),
-            //             address: $('#requisition_address').val(), 
-            //             requisition_type: $('#requisition_type').val(),
-            //             company_value: $('#edit_requisition_company').val(),
-            //             sr:$('#sr_no').val(),
-            //             no_flag: false
-            //         },
-            //         headers: {
-            //             "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
-            //         },
-            //         success: function(response) {
-            //             if (response.status) {
-            //                 // Clear previous errors
-            //                 $('#requisition_noError').text('');
-
-            //                 Toastify({
-            //                     text: "Requisition Updated Successfully",
-            //                     duration: 3000,
-            //                     gravity: "top",
-            //                     position: 'right',
-            //                     backgroundColor: "#228B22",
-            //                     stopOnFocus: true,
-            //                 }).showToast();
-
-            //                 location.href = "<?php echo e(route('requisitions.create')); ?>";
-            //             } else {
-            //                 console.error(response.message);
-            //             }
-            //         },
-            //         error: function(xhr, status, error) {
-            //             if (xhr.responseJSON.errors.requisition_no) {
-            //                 $('#requisition_noError').text(xhr.responseJSON.errors.requisition_no);
-            //             }
-            //             console.error('AJAX request error:', error);
-            //         },
-            //         complete: function() {
-            //             submitButton.prop('disabled', false); // Re-enable the submit button
-            //         }
-            //     });
-            // });
-
-            // save as draft the requisition
-            $('#saveRequisitions_submit').on('click', function(e) {
-                e.preventDefault();
-                
+            // Submit the requisition
+            $(document).on('click', '#new_requisitions_submit', function() {
+                // Disable the submit button to prevent multiple submissions
                 let submitButton = $(this).find('button[type="submit"]');
-                submitButton.prop('disabled', true); 
-                let url = window.location.pathname;
-                let requisitionId = url.substring(url.lastIndexOf('/') + 1);
+                submitButton.prop('disabled', true);
+
+                // Clear previous error messages
+                $('#requisition_typeError').text('');
+                $('#requisition_noError').text('');
+                $('#companyError').text('');
+
+                if (!requisition_type || requisition_type === "Select Order Type") {
+                    $('#requisition_typeError').text('Order Type is required.');
+                    return; // Stop the function if validation fails
+                }
+
+                if (requisition_no === "") {
+                    $('#requisition_noError').text('Requisition No is required.');
+                    return; // Stop the function if validation fails
+                }
+
+                if (!requisition_company) {
+                    $('#companyError').text('Company is required.');
+                    return; // Stop the function if validation fails
+                }
 
                 $.ajax({
-                    url: "<?php echo e(route('saveReturnRequisition.Submit', ':id')); ?>".replace(':id', requisitionId), 
-                    type: 'PUT', 
+                    url: "<?php echo e(route('orders.store')); ?>",
+                    type: 'POST',
                     data: {
                         requisition_date: $('#requisition_date').val(),
                         category: $('input[name="category"]:checked').val(),
                         category_two: $('input[name="category_two"]:checked').val(),
                         requisition_no: $('#requisition_no').val(),
-                        unit_type: $('input[name="unit_type"]:checked').val(),
-                        buyer_name: $('#requisition_buyer_name').val(),
-                        address: $('#requisition_address').val(), 
                         requisition_type: $('#requisition_type').val(),
-                        company_value: $('#edit_requisition_company').val(),
-                        sr:$('#sr_no').val(),
-                        no_flag: false
+                        company_value: $('#requisition_company').val(),
+                        no_flag: true
                     },
                     headers: {
                         "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
                     },
                     success: function(response) {
                         if (response.status) {
-                            // Clear previous errors
-                            $('#requisition_noError').text('');
-
-                            Toastify({
-                                text: "Requisition saved Successfully",
-                                duration: 3000,
-                                gravity: "top",
-                                position: 'right',
-                                backgroundColor: "#228B22",
-                                stopOnFocus: true,
-                            }).showToast();
-
-                            location.href = "<?php echo e(route('requisitions.create')); ?>";
+                            window.location.href = "<?php echo e(route('orders.index')); ?>";
                         } else {
                             console.error(response.message);
                         }
                     },
                     error: function(xhr, status, error) {
-                        if (xhr.responseJSON.errors.requisition_no) {
-                            $('#requisition_noError').text(xhr.responseJSON.errors.requisition_no);
-                        }
                         console.error('AJAX request error:', error);
-                    },
-                    complete: function() {
-                        submitButton.prop('disabled', false); // Re-enable the submit button
+
                     }
+                }).always(function() {
+                    // Re-enable the submit button
+                    submitButton.prop('disabled', false);
                 });
             });
-
-                // save as draft the requisition
-                $('#saveDraft_submit').on('click', function(e) {
-                    e.preventDefault();
-                    
-                    let submitButton = $(this).find('button[type="submit"]');
-                    submitButton.prop('disabled', true);
-                    let url = window.location.pathname;
-                    let requisitionId = url.substring(url.lastIndexOf('/') + 1);
-
-                    $.ajax({
-                        url: "<?php echo e(route('saveDraftRequisition', ':id')); ?>".replace(':id', requisitionId), 
-                        type: 'PUT', 
-                        data: {
-                            requisition_date: $('#requisition_date').val(),
-                            category: $('input[name="category"]:checked').val(),
-                            category_two: $('input[name="category_two"]:checked').val(),
-                            requisition_no: $('#requisition_no').val(),
-                            unit_type: $('input[name="unit_type"]:checked').val(),
-                            buyer_name: $('#requisition_buyer_name').val(),
-                            address: $('#requisition_address').val(), 
-                            requisition_type: $('#requisition_type').val(),
-                            company_value: $('#edit_requisition_company').val(),
-                            sr:$('#sr_no').val(),
-                            no_flag: false
-                        },
-                        headers: {
-                            "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
-                        },
-                        success: function(response) {
-                            if (response.status) {
-                                // Clear previous errors
-                                $('#requisition_noError').text('');
-
-                                Toastify({
-                                    text: "Requisition saved Successfully",
-                                    duration: 3000,
-                                    gravity: "top",
-                                    position: 'right',
-                                    backgroundColor: "#228B22",
-                                    stopOnFocus: true,
-                                }).showToast();
-
-                                location.href = "<?php echo e(route('requisitions.create')); ?>";
-                            } else {
-                                console.error(response.message);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            if (xhr.responseJSON.errors.requisition_no) {
-                                $('#requisition_noError').text(xhr.responseJSON.errors.requisition_no);
-                            }
-                            console.error('AJAX request error:', error);
-                        },
-                        complete: function() {
-                            submitButton.prop('disabled', false); // Re-enable the submit button
-                        }
-                    });
-                });
-
 
             // Save Draft requisition
             $('#save_draft_button').on('click', function(e) {
@@ -1239,11 +882,10 @@
                         category: $('input[name="category"]:checked').val(),
                         category_two: $('input[name="category_two"]:checked').val(),
                         requisition_no: $('#requisition_no').val(),
-                        unit_type: $('input[name="unit_type"]:checked').val(),
                         buyer_name: $('#requisition_buyer_name').val(),
                         address: $('#requisition_address').val(),
                         requisition_type: $('#requisition_type').val(),
-                        company_value: $('#edit_requisition_company').val(),
+                        company_value: $('#requisition_company').val(),
                         sr:$('#sr_no').val(),
                         no_flag: false
                     },
@@ -1283,44 +925,93 @@
                 });
             });
 
+        $('#auto-generate-btn').on('click', function() {
+            $.ajax({
+                url: "<?php echo e(route('order.generate')); ?>",
+                type: 'GET',
+                dataType: 'json', // Ensure JSON response
+                success: function(response) {
+                    $('#requisition_no').val(response.data);
+                    Toastify({
+                        text: "Order Number Generated Successfully",
+                        duration: 3000,
+                        gravity: "top",
+                        position: 'right',
+                        backgroundColor: "#228B22",
+                        stopOnFocus: true,
+                    }).showToast();
+
+                    if (data && data.status) {
+                        console.log('Order Number:', data.data); // Ensure data.data exists
+                    } else {
+                        console.error('Unexpected Response Format', data);
+                    }
+                },
+                error: function(xhr) {
+                    console.error('AJAX Error:', xhr.responseText); // Log the full error response
+                    $('#requisition_noError').text('Error generating requisition number.');
+                }
+            });
+        });
+
+
+            //hide
+            $('#no_auto-generate-btn').on('click', function() {
+                $.ajax({
+                    url: "<?php echo e(route('requisitions.generate')); ?>",
+                    type: 'GET',
+                    success: function(data) {
+                        $('#no_requisition_no').val(data.data);
+                        Toastify({
+                            text: "Requisition Number Generated Successfully",
+                            duration: 3000,
+                            gravity: "top",
+                            position: 'right',
+                            backgroundColor: "#228B22",
+                            stopOnFocus: true,
+                        }).showToast();
+                    },
+                    error: function(xhr) {
+                        $('#requisition_noError').text(
+                            'Error generating requisition number.');
+                    }
+                });
+            });
+
             // Get company in dropdown
             let companyData = {};
-            let selectedCompanyId = $('#edit_requisition_company_id').val(); // Get value from hidden input
 
             $.ajax({
                 url: "<?php echo e(route('companies.create')); ?>",
                 type: "GET",
                 success: function(response) {
-                    $('#edit_requisition_company').empty();
-                    $('#edit_requisition_company').append('<option disabled>Select Company</option>');
+                    $('#requisition_company').empty(); // Make sure you're targeting the correct ID
+                    $('#requisition_company').append('<option disabled selected>Select Company</option>');
 
                     response.company.forEach(function(company) {
-                        $('#edit_requisition_company').append('<option value="' + company.id + '">' + company.name + '</option>');
+                        $('#requisition_company').append('<option value="' + company.id + '">' + company.name + '</option>');
                         companyData[company.id] = company;
                     });
-
-                    // Ensure value is set after dropdown is populated
-                    $('#edit_requisition_company').val(selectedCompanyId).trigger('change');
                 },
                 error: function(err) {
                     console.log(err);
                 }
             });
 
-            // Update buyer name and address on company selection
-            $('#edit_requisition_company').on('change', function() {
-                let selectedCompanyId = $(this).val();
-                if (companyData[selectedCompanyId]) {
-                    $('#requisition_address').val(companyData[selectedCompanyId].address || '');
-                    $('#requisition_buyer_name').val(companyData[selectedCompanyId].buyer_name || '');
-                    $('#sr_no').val(companyData[selectedCompanyId].sr_no || '');
-                } else {
-                    $('#requisition_address').val('');
-                    $('#requisition_buyer_name').val('');
-                    $('#sr_no').val('');
-                }
-            });
+            // // Update buyer name and address on company selection
+            // $('#requisition_company').on('change', function() {
+            //     let selectedCompanyId = $(this).val();
+            //     if (companyData[selectedCompanyId]) {
+            //         $('#requisition_address').val(companyData[selectedCompanyId].address || '');
+            //         $('#requisition_buyer_name').val(companyData[selectedCompanyId].buyer_name || '');
+            //         $('#sr_no').val(companyData[selectedCompanyId].sr_no || '');
+            //     } else {
+            //         $('#requisition_address').val('');
+            //         $('#requisition_buyer_name').val('');
+            //         $('#sr_no').val('');
+            //     }
+            // });
         });
         </script>
         <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\RNT Automation\resources\views/backend/requisitions/return_requisition_edit.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\RNT Automation\resources\views/backend/order/createOrder.blade.php ENDPATH**/ ?>

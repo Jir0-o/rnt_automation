@@ -419,6 +419,28 @@
                 </li>
                 <?php endif; ?>
 
+                <li class="menu-header small text-uppercase">
+                    <span class="menu-header-text">Order Section</span>
+                </li>
+                
+                <li class="menu-item all_item <?php echo e(request()->is('orders') || request()->is('orders') ? 'open' : ''); ?>">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bxs-wallet"></i>
+                        <div data-i18n="Layouts">Order Details</div>
+                        <span class="badge bg-danger ms-auto"></span>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item <?php echo e(request()->is('orders') ? 'active' : ''); ?>">
+                            <a href="<?php echo e(route('orders.index')); ?>" class="menu-link">
+                                <div data-i18n="report">
+                                    All Orders
+                                </div>
+                                <span class="badge bg-danger ms-auto"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Can Access Report')): ?>
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Report Section</span>
