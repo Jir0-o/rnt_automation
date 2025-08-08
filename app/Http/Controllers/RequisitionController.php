@@ -45,6 +45,14 @@ use Carbon\Carbon;
 class RequisitionController extends Controller
 
 {  
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+
+    {
+        $this->middleware('permission:Can Access Requisitions')->only(['index', 'create', 'store', 'edit', 'update', 'destroy', 'rejectRequisition', 'acceptRequisition', 'acceptAuthRequisition', 'loanRequisition', 'noRequisition', 'editNoRequisition', 'createRequisition']);
+    }
 
     /**
 
@@ -3114,7 +3122,7 @@ public function saveRequisitionUpdate(Request $request, $id)
 
     
 
-                $counter = 100; // Default starting counter
+                $counter = 100; // Default starting counter 
 
     
 

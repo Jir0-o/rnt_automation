@@ -2,8 +2,13 @@
     .small-text {
         font-size: 12px; /* Adjust size as needed */
     }
+    .notification-unread {
+    background-color: #85cadb;
+    transition: background-color .3s ease;
+    }
 </style>
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- Navbar -->
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -37,7 +42,7 @@
                     <li>
                         <div class="dropdown-header d-flex justify-content-between align-items-center">
                             <span>Notifications</span>
-                            <a href="javascript:void(0)">Mark all as read</a>
+                            <a href="javascript:void(0)" id="mark-all-read">Mark all as read</a>
                         </div>
                     </li>
                     <li>
@@ -86,7 +91,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item" href="{{route('profile')}}">
+                        <a class="dropdown-item" href="{{route('user.profile')}}">
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar avatar-online overflow-hidden">
@@ -106,7 +111,7 @@
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{route('profile')}}">
+                        <a class="dropdown-item" href="{{route('user.profile')}}">
                             <i class="bx bx-user me-2"></i>
                             <span class="align-middle">My Profile</span>
                         </a>
@@ -237,7 +242,7 @@ function fetchNotificationCounts() {
                     if (notification.is_active == 0) {
                         $('#load_notify_data').append(`
                         <li>
-                            <a class="dropdown-item notification_click" href="${link}" data-id="${notification.id}" style="background-color: #85cadb;">
+                            <a class="dropdown-item notification_click notification-unread" href="${link}" data-id="${notification.id}" style="background-color: #85cadb;">
                                 <div class="d-flex gap-3">
                                     <div class="avatar avatar-online overflow-hidden">
                                         <img class="img-fluid rounded-circle" src="/global_assets/user_images/${profilePhoto}" alt="User Avatar" class="w-35px rounded-circle">
@@ -297,6 +302,91 @@ function fetchNotificationCounts() {
     });
 }
 
+    // === run once after jQuery is ready ===
+    $(function() {
+    // CSRF header (requires <meta name="csrf-token" content="{{ csrf_token() }}"> in your layout)
+    $.ajaxSetup({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Mark all as read
+    $(document).on('click', '#mark-all-read', function(e) {
+        e.preventDefault();
+        $.ajax({
+        url: '{{ route("notification.markAllRead") }}',
+        method: 'POST'
+        })
+        .done(function() {
+        $('.notificationCount').hide();
+        $('#load_notify_data .notification-unread')
+            .removeClass('notification-unread');
+        })
+        .fail(function(xhr) {
+        if (xhr.status === 419) {
+            // CSRF/session expired — refresh to recover
+            location.reload();
+        } else {
+            console.error('Failed to mark all as read', xhr);
+        }
+        });
+    });
+
+    // Individual notification click
+    $(document).on('click', '.notification_click', function(e) {
+        e.preventDefault();
+        const $item = $(this);
+
+        if ($item.data('processing')) return; // debounce
+        $item.data('processing', true);
+
+        const notifId = $item.data('id');
+        const targetHref = $item.attr('href') || 'javascript:void(0)';
+        const wasUnread = $item.hasClass('notification-unread');
+
+        const navigate = () => {
+        setTimeout(() => {
+            window.location.href = targetHref;
+        }, 150); // small delay so user sees the visual change
+        };
+
+        if (wasUnread) {
+        $.ajax({
+            url: `{{ url('notifications') }}/${notifId}/read`,
+            method: 'POST'
+        })
+        .done(function() {
+            // remove unread styling (you can animate via CSS transition if defined)
+            $item.removeClass('notification-unread');
+            // update badge count
+            let count = parseInt($('.notificationCount').text() || '0', 10);
+            if (count > 1) {
+            $('.notificationCount').text(count - 1);
+            } else {
+            $('.notificationCount').hide();
+            }
+        })
+        .fail(function(xhr) {
+            if (xhr.status === 419) {
+            location.reload();
+            } else {
+            console.warn('Failed to mark notification read', xhr);
+            }
+        })
+        .always(function() {
+            $item.data('processing', false);
+            navigate();
+        });
+        } else {
+        $item.data('processing', false);
+        navigate();
+        }
+    });
+    });
+
+
+
     function formatDate(createdAt) {
         // Parse the created_at timestamp
         const date = new Date(createdAt);
@@ -317,36 +407,27 @@ function fetchNotificationCounts() {
 
     function getUser() {
         $.ajax({
-            url: "{{ route('profile.show') }}",
+            url: "{{ route('user.show') }}",
             type: "GET",
             success: function(response) {
-                console.log(response);
-                $('#user-name').text(response.data.name);
-                $('#user-department').text(response.data.department.name);
-                $('#user-designation').text(response.data.designation.designation);
-                // Check if the user has a profile photo
-                if (response.data.profile_photo_path) {
-                    // If profile photo exists, set the image source
-                    $('#user-image').attr('src', '/public/global_assets/user_images/' + response.data
-                        .profile_photo_path);
-                    $('#dropdown-user-image').attr('src', '/public/global_assets/user_images/' + response
-                        .data.profile_photo_path);
-                } else {
-                    // If no profile photo exists, set a default image source
-                    $('#user-image').attr('src', '/public/global_assets/user_images/default.png');
-                    $('#dropdown-user-image').attr('src', '/public/global_assets/user_images/default.png');
-                }
-                // Check if the user has a role
-                if (response.data.userhas_role) {
-                    // If user has a role, set the role name
-                    $('#user-role').text(response.data.userhas_role[0].role.name);
-                } else {
-                    // If user has no role, set a default role name
-                    $('#user-role').text('No Role');
-                }
+                // accommodate whether backend wraps in { data: { ... } } or returns directly
+                const user = response.data || response;
+
+                $('#user-name').text(user.name || '');
+                $('#user-department').text(user.department?.name || '');
+                $('#user-designation').text(user.designation?.designation || '');
+
+                // Profile photo: use the provided URL or fallback
+                const photoUrl = user.profile_photo_url || '/global_assets/user_images/default.png';
+                $('#user-image, #dropdown-user-image').attr('src', photoUrl);
+
+                // Role (flattened)
+                const roleName = user.role || user.roles?.[0]?.name || 'No Role';
+                $('#user-role').text(roleName);
             }
         });
     }
     getUser();
+
 });
 </script>

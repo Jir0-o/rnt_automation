@@ -8,6 +8,7 @@
   data-assets-path="../assets/"
   data-template="vertical-menu-template-free">
   <head>
+    @yield('head') 
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -85,53 +86,18 @@
     <script src='https://unpkg.com/@fullcalendar/resource-timeline@4.4.0/main.js'></script>
     <script src='https://unpkg.com/@fullcalendar/interaction@4.4.0/main.js'></script>
 
-    {{-- <style>
+<style>
 
-    .note-section {
-        border: 1px solid #000;
-        border-radius: 3px;
-        padding: 5px;
-        margin-bottom: 3px;
-    }
+/* Force all text to black */
+body, body * {
+  color: #000 !important;
+}
 
-    .reviewer-section {
-        padding: 5px;
-        border-radius: 3px;
-        margin-bottom: 3px;
-    }
-
-    .reviewer-comment, .reviewer-signature, .reviewer-date {
-        border: 1px solid #000;
-        border-radius: 3px;
-        padding: 3px;
-        margin-bottom: 3px;
-    }
-
-    .note-reviewer-section {
-        margin-bottom: 5px;
-        border-radius: 3px;
-    }
-
-
-    .review-section {
-        text-align: center;
-        margin-top: 7px;
-        margin-bottom: 10px;
-    }
-    .review-comment, .reviewer-name {
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    .review-section .review-comment {
-        font-weight: bold;
-    }
-    .review-section .reviewer-name {
-        margin-top: 10px;
-        font-style: italic;
-    }
-</style> --}}
+/* Ensure links are readable too */
+a {
+  color: #000 !important;
+}
+</style>
 
   </head>
 

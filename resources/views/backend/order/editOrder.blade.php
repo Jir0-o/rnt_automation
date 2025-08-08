@@ -152,7 +152,7 @@
                     <br>
                     <div class="card card-default" id="requisition-details">
                         <div class="card-body">
-                            <h5 class="card-title">Orders Details</h5>
+                            <h5 class="card-title">Order Details</h5>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tbody>

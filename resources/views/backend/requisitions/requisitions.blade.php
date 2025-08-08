@@ -959,7 +959,7 @@ $(document).ready(function() {
     });
 
         // Show invoice button click handler
-        $(document).on('click', '.showInvoiceBtn', function () {
+        $(document).on('click', '.showInvoiceBtn', function () { 
             var requisition_id = $(this).data('id');
             var status = $(this).data('status');
 

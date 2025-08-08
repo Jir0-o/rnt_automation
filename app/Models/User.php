@@ -160,4 +160,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profile_photo_path &&
+            file_exists(public_path('global_assets/user_images/' . $this->profile_photo_path))
+        ) {
+            return asset('global_assets/user_images/' . $this->profile_photo_path);
+        }
+
+        return 'https://via.placeholder.com/110?text=Avatar';
+    }
 }

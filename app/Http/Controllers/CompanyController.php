@@ -10,6 +10,14 @@ use Illuminate\Http\Request;
 class CompanyController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+
+    public function __construct()
+    {
+        $this->middleware('permission:Can Access Company')->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    }
+    /**
      * Display a listing of the resource.
      */
     public function index()

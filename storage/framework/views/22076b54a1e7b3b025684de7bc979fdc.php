@@ -189,7 +189,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -265,7 +265,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -288,7 +288,7 @@
                                     <td><?php echo e(\Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y')); ?>
 
                                     </td>
-                                    <td><?php echo e($requisition->requisition_no); ?></td>
+                                    <td><?php echo e($requisition->order_no); ?></td>
                                     <td>
                                         <?php if($requisition->status == 0): ?>
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -361,7 +361,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -374,7 +374,7 @@
                                     <td><?php echo e(\Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y')); ?>
 
                                     </td>
-                                    <td><?php echo e($requisition->requisition_no); ?></td>
+                                    <td><?php echo e($requisition->order_no); ?></td>
                                     <td>
                                         <?php if($requisition->status == 0): ?>
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -431,7 +431,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -444,7 +444,7 @@
                                     <td><?php echo e(\Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y')); ?>
 
                                     </td>
-                                    <td><?php echo e($requisition->requisition_no); ?></td>
+                                    <td><?php echo e($requisition->order_no); ?></td>
                                     <td>
                                         <?php if($requisition->status == 0): ?>
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -495,7 +495,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -508,7 +508,7 @@
                                     <td><?php echo e(\Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y')); ?>
 
                                     </td>
-                                    <td><?php echo e($requisition->requisition_no); ?></td>
+                                    <td><?php echo e($requisition->order_no); ?></td>
                                     <td>
                                         <?php if($requisition->status == 0): ?>
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -571,7 +571,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -584,7 +584,7 @@
                                     <td><?php echo e(\Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y')); ?>
 
                                     </td>
-                                    <td><?php echo e($requisition->requisition_no); ?></td>
+                                    <td><?php echo e($requisition->order_no); ?></td>
                                     <td>
                                         <?php if($requisition->status == 0): ?>
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -641,7 +641,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Return Reason</th>
                                     <th>Status</th>
                                     <th>Actions</th>
@@ -655,7 +655,7 @@
                                     <td><?php echo e(\Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y')); ?>
 
                                     </td>
-                                    <td><?php echo e($requisition->requisition_no); ?></td>
+                                    <td><?php echo e($requisition->order_no); ?></td>
                                     <td><?php echo $requisition->remarks; ?></td>
                                     <td>
                                         <?php if($requisition->status == 0): ?>

@@ -36,6 +36,7 @@
     @livewireScripts
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 </body>
 
 </html>

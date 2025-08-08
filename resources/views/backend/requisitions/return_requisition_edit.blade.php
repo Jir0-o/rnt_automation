@@ -1031,7 +1031,7 @@
                         timer: 2000,
                         showConfirmButton: true
                     }).then(() => {
-                        // location.href = "{{ route('requisitions.create') }}"; // Redirect after success
+                         location.href = "{{ route('requisitions.create') }}"; // Redirect after success
                     });
                 },
                 error: function (xhr) {

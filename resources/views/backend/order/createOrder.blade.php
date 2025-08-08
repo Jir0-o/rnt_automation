@@ -125,7 +125,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <h5 class="card-title">Requisitions Items</h5>
+                                    <h5 class="card-title">Order Items</h5>
                                     <div class="table-responsive text-nowrap p-3">
                                         <table id="Temp_Requisitions_Table" class="table">
                                             <thead>
@@ -152,7 +152,7 @@
                     <br>
                     <div class="card card-default" id="requisition-details">
                         <div class="card-body">
-                            <h5 class="card-title">Requisitions Details</h5>
+                            <h5 class="card-title">Order Details</h5>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tbody>
@@ -182,7 +182,7 @@
 
                                 <!-- Right side "Requisition" button -->
                                 <button class="btn btn-primary" type="button" id="new_requisitions_submit">
-                                    <i class='bx bx-plus' style="margin-left: -7px; margin-right: 3px;"></i>Requisition
+                                    <i class='bx bx-plus' style="margin-left: -7px; margin-right: 3px;"></i>Create Order
                                 </button>
                             </div>
                             <br>

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CostTypeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Models\ReceivedProduct;
 use Illuminate\Support\Facades\Route;
@@ -80,9 +82,15 @@ Route::middleware([
     })->where('file', '.*');
     
 
-    Route::get('/profile',[UserController::class, 'profile'])->name('profile');
-    Route::get('/profile/show',[UserController::class, 'showProfile'])->name('profile.show');
-    Route::post('/profile/password',[UserController::class, 'changePassword'])->name('profile.password');
+    // Route::get('/profile',[UserController::class, 'profile'])->name('profile');
+    // Route::get('/profile/show',[UserController::class, 'showProfile'])->name('profile.show');
+    // Route::post('/profile/password',[UserController::class, 'changePassword'])->name('profile.password');
+
+    Route::get('/user/profile', [ProfileController::class, 'userProfile'])->name('user.profile');
+    Route::get('/user/profile/show', [ProfileController::class, 'show'])->name('user.show');
+    Route::post('/user/update', [ProfileController::class, 'update'])->name('user.update');
+    Route::post('/user/password', [ProfileController::class, 'changePassword'])->name('user.password');
+
     Route::post('/settings/{id}', [SettingsController::class, 'updateSetting'])->name('settings.update');
     Route::get('/settings',[SettingsController::class, 'index'])->name('settings');
     Route::post('/settings',[SettingsController::class, 'store'])->name('settings.store');
@@ -164,6 +172,8 @@ Route::middleware([
     Route::resource('cost-types', CostTypeController::class);
     Route::resource('transactions', TransactionController::class);
     Route::resource('orders', OrderController::class);
+    Route::resource('get-invoice', InvoiceController::class);
+
 
     //cost management
     Route::get('/get-cost-types', [DailyCostController::class, 'getCostTypes'])->name('get-cost-types');
@@ -426,4 +436,17 @@ Route::middleware([
     Route::get('/order/details/{id}', [OrderController::class, 'orderDetails'])->name('orders.details');
     Route::post('/order/update/{id}', [OrderController::class, 'updateOrder'])->name('orders.update');
 
+    //order total
+    Route::get('/order/total', [OrderController::class, 'totalOrder'])->name('orders.total');
+    Route::get('/order/today', [OrderController::class, 'todayOrder'])->name('orders.today');
+    Route::get('/monthly/order', [OrderController::class, 'getMonthlyOrder'])->name('statistics.monthly.order');
+    Route::get('/yearly/order', [OrderController::class, 'getYearlyOrder'])->name('yearly.order');
+
+    //notification
+    Route::post('/notification/{id}/read', [NotificationController::class, 'markRead'])->name('notification.markRead');
+    Route::post('/notification/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notification.markAllRead');
+
+
+    //create invoice routes
+    Route::get('/generate-invoice', [InvoiceController::class, 'invoiceGenerate'])->name('invoice.generate');
 });

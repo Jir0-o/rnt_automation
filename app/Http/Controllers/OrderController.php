@@ -12,11 +12,20 @@ use App\Models\Role;
 use App\Models\TempRequisitionProduct;
 use App\Models\UnitType;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    //constructor to apply middleware for spatie roles and permissions
+    //if auth user have permission then only index method will be accessible
+    public function __construct()
+    {
+        $this->middleware('permission:Can Access Order Details', ['only' => ['index', 'show']]);
+        $this->middleware('permission:Can Access Create Order', ['only' => ['create', 'store']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -419,15 +428,15 @@ class OrderController extends Controller
     
                             'from_user_id' => $authUser->id,
     
-                            'title' => 'New Requisition Created',
+                            'title' => 'New Order Created',
     
-                            'text' => 'A new requisition has been created by ' . $authUser->name .  
+                            'text' => 'A new order has been created by ' . $authUser->name .  
     
-                                    'Requisition No: ' . $requisition->requisition_no . ' Please check the requisition.',
+                                    'Order No: ' . $requisition->order_no . ' Please check the requisition.',
     
                             'to_user_id' => $user->id,
     
-                            'link' => route('requisitions.create')
+                            'link' => route('orders.show', ['order' => $requisition->id]),
     
                         ]);
     
@@ -1176,4 +1185,234 @@ class OrderController extends Controller
     
     }
 
+    function totalOrder(Request $request)
+
+        {
+
+            try {
+    
+                $user = User::find(Auth::user()->id);
+    
+                
+    
+                if($user->hasRole('Sales Man')){
+    
+                    $requisitions = Order::where('user_id', auth()->user()->id)
+    
+                        ->orderBy('id', 'DESC')
+    
+                        ->get();
+    
+                } else {
+    
+                    $requisitions = Order::orderBy('id', 'DESC')
+    
+                        ->get();
+    
+                }
+    
+    
+    
+                if (!$requisitions) {
+    
+                    return response()->json([
+    
+                        'status' => false,
+    
+                        'message' => 'No data found',
+    
+                        'data' => []
+    
+                    ], 404);
+    
+                }
+    
+    
+    
+                return response()->json([
+    
+                    'status' => true,
+    
+                    'message' => 'Requisitions fetched successfully',
+    
+                    'data' => $requisitions
+    
+                ], 200);
+    
+            } catch (\Exception $e) {
+    
+                return response()->json([
+    
+                    'status' => false,
+    
+                    'message' => 'Failed to fetch requisitions',
+    
+                    'error' => $e->getMessage()
+    
+                ], 500);
+    
+            }
+    
+        }
+
+        function todayOrder(Request $request)
+
+        {
+
+            try {
+    
+                $user = User::find(Auth::user()->id);
+    
+                
+    
+                if($user->hasRole('Sales Man')){
+    
+                    $requisitions = Order::where('user_id', auth()->user()->id)
+    
+                        ->whereDate('order_date', Carbon::today())
+    
+                        ->orderBy('id', 'DESC')
+    
+                        ->get();
+    
+                } else {
+    
+                    $requisitions = Order::whereDate('order_date', Carbon::today())
+    
+                        ->orderBy('id', 'DESC')
+    
+                        ->get();
+    
+                }
+    
+    
+    
+                if (!$requisitions) {
+    
+                    return response()->json([
+    
+                        'status' => false,
+    
+                        'message' => 'No data found',
+    
+                        'data' => []
+    
+                    ], 404);
+    
+                }
+    
+    
+    
+                return response()->json([
+    
+                    'status' => true,
+    
+                    'message' => 'Requisitions fetched successfully',
+    
+                    'data' => $requisitions
+    
+                ], 200);
+    
+            } catch (\Exception $e) {
+    
+                return response()->json([
+    
+                    'status' => false,
+    
+                    'message' => 'Failed to fetch requisitions',
+    
+                    'error' => $e->getMessage()
+    
+                ], 500);
+    
+            }
+    
+        }
+
+        public function getMonthlyOrder()
+        {
+            if (auth()->user()->hasRole('Sales Man')) {
+                $monthlyOrders = Order::with('orderProducts') // Load the related orderProducts
+                    ->whereYear('created_at', Carbon::now()->year) // Filter by current year
+                    ->where('user_id', auth()->user()->id) // Filter by the logged-in salesperson
+                    ->get()
+                    ->groupBy(function ($order) {
+                        return Carbon::parse($order->created_at)->format('m'); // Group by month
+                    })
+                    ->map(function ($orders) {
+                        return $orders->sum(function ($order) {
+                            return $order->orderProducts->sum(function ($product) {
+                                return $product->unit_price * $product->quantity; // Calculate total sales
+                            });
+                        });
+                    })
+                    ->toArray();
+            } else {
+                $monthlyOrders = Order::with('orderProducts') // Load the related orderProducts
+                    ->whereYear('created_at', Carbon::now()->year) // Filter by current year
+                    ->get()
+                    ->groupBy(function ($order) {
+                        return Carbon::parse($order->created_at)->format('m'); // Group by month
+                    })
+                    ->map(function ($orders) {
+                        return $orders->sum(function ($order) {
+                            return $order->orderProducts->sum(function ($product) {
+                                return $product->unit_price * $product->quantity; // Calculate total sales
+                            });
+                        });
+                    })
+                    ->toArray();
+            }
+        
+            // Fill missing months with 0
+            $monthlyData = array_fill(0, 12, 0); // Initialize array with 12 zeroes (index 0 = Jan, index 11 = Dec)
+        
+            foreach ($monthlyOrders as $month => $totalSales) {
+                $monthlyData[(int)$month - 1] = (float) $totalSales; // Adjust index (Jan = 0, Feb = 1, etc.)
+            }
+        
+            return response()->json([
+                'status' => true,
+                'message' => 'Monthly order report fetched successfully',
+                'data' => array_values($monthlyData) // Ensure correct JSON formatting
+            ]);
+        }
+        
+    //yearly order report function
+        public function getYearlyOrder()
+        {
+            if (Auth::user()->hasRole('Sales Man')){
+            $yearlyOrders = Order::selectRaw("YEAR(orders.created_at) as year, SUM(order_products.unit_price * order_products.quantity) as total_sales")
+                ->join('order_products', 'orders.id', '=', 'order_products.order_id')
+                ->whereYear('orders.created_at', Carbon::now()->year) // Specify the table name to avoid ambiguity
+                ->groupBy('year')
+                ->where('user_id', auth()->user()->id)
+                ->orderBy('year')
+                ->pluck('total_sales', 'year')
+                ->toArray();
+            }else{
+                $yearlyOrders = Order::selectRaw("YEAR(orders.created_at) as year, SUM(order_products.unit_price * order_products.quantity) as total_sales")
+                ->join('order_products', 'orders.id', '=', 'order_products.order_id')
+                ->whereYear('orders.created_at', Carbon::now()->year) // Specify the table name to avoid ambiguity
+                ->groupBy('year')
+                ->orderBy('year')
+                ->pluck('total_sales', 'year')
+                ->toArray();
+            }
+        
+            // Fill missing years with 0
+            $yearlyData = array_fill(0, 5, 0); // Initialize array with 5 zeroes (index 0 = 2023, index 4 = 2027)
+            
+            foreach ($yearlyOrders as $year => $totalSales) {
+                $yearlyData[$year - 2023] = (float) $totalSales; // Adjust index (2023 = 0, 2024 = 1, etc.)
+            }
+
+        
+            return response()->json([
+                'status' => true,
+                'message' => 'Yearly order report fetched successfully',
+                'data' => array_values($yearlyData)
+            ]);
+        }      
+        
 }

@@ -156,6 +156,21 @@
         background: rgba(0, 255, 0, 0.1); /* Green background for success alerts */
         border-color: rgba(0, 255, 0, 0.2);
     }
+
+    .password-wrapper { position: relative; }
+    .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        padding: 4px;
+        cursor: pointer;
+        line-height: 0;
+    }
+    .toggle-password svg { display: block; width: 20px; height: 20px; }
+
 </style>
 <section class="vh-100 d-flex align-items-center justify-content-center">
     <div class="container">
@@ -196,11 +211,13 @@
                             <!-- Password input -->
                             <div class="mb-3">
                                 <label class="form-label" for="password">Password</label>
-                                <input id="password" class="form-control form-control-lg" type="password" name="password"
-                                    required autocomplete="current-password"
-                                    placeholder="Enter your password" />
+                                <div class="password-wrapper" style="position: relative;">
+                                    <input id="password" class="form-control form-control-lg" type="password" name="password"
+                                        required autocomplete="current-password"
+                                        placeholder="Enter your password" />
+                                    <button type="button" class="toggle-password" aria-label="Show password" tabindex="0"></button>
+                                </div>
                             </div>
-
                             <!-- Remember me and Forgot password -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="block">
@@ -242,4 +259,38 @@
         </div>
     </div>
 </section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const eyeSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    const eyeOffSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.86 21.86 0 0 1 5.06-5.94"/><path d="M9.88 9.88a3 3 0 0 0 4.24 4.24"/><path d="M1 1l22 22"/></svg>`;
+
+    document.querySelectorAll('.password-wrapper').forEach(function (wrapper) {
+        const input = wrapper.querySelector('input[type="password"], input[type="text"]');
+        if (!input) return;
+        const btn = wrapper.querySelector('.toggle-password');
+        if (!btn) return;
+
+        // initial state: hidden
+        btn.innerHTML = eyeSVG;
+        btn.setAttribute('aria-label', 'Show password');
+        btn.style.cursor = 'pointer';
+
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            if (isPassword) {
+                btn.innerHTML = eyeOffSVG;
+                btn.setAttribute('aria-label', 'Hide password');
+            } else {
+                btn.innerHTML = eyeSVG;
+                btn.setAttribute('aria-label', 'Show password');
+            }
+            input.focus();
+        });
+    });
+});
+</script>
+
+
 @endsection

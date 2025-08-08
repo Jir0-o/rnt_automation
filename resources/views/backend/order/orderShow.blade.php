@@ -287,7 +287,7 @@
                 </button>
             </div>
             <!-- Middle: Return button -->
-            {{-- @if (Auth::user()->can('Can Access Requisitions Accept and Reject'))--}}
+            @if (Auth::user()->can('Can Access Requisitions Accept and Reject'))
              @if ($requisition->status == 0)
             <div>
                 <button type="button" class="btn btn-warning returnRequisitionBtn" data-id="{{ $requisition->id }}">
@@ -295,7 +295,7 @@
                 </button>
             </div>
              @endif
-            {{-- @endif --}}
+            @endif
 
             <!-- Right side container for the Send button -->
             @if ($requisition->status == 11 || $requisition->status == 12 || $requisition->status == 13)
@@ -306,6 +306,7 @@
                 </button>
             </div>
             @endif
+            @if (Auth::user()->can('Can Access Requisitions Accept and Reject'))
             @if ($requisition->status == 0)
             <button type="button" class="btn btn-success acceptOrderBtn" data-id="{{ $requisition->id }}" style="margin-right:5px;">
                 <i class="bx bx-check me-1"></i> Accept
@@ -313,6 +314,7 @@
                 <button type="button" class="btn btn-danger rejectOrderBtn" data-id="{{ $requisition->id }}" style="margin-right: 5px;">
                 <i class="bx bx-x me-1"></i> Reject
             </button>  
+            @endif
             @endif
             @if ($requisition->status == 12 || $requisition->status == 13 || $requisition->status == 11)
             <button type="button" class="btn btn-warning editReturnRequisitionBtn" data-id="{{ $requisition->id }}" style="margin-right:5px;">

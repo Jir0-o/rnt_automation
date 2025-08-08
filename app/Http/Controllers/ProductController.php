@@ -39,6 +39,10 @@ use Illuminate\Support\Carbon;
 class ProductController extends Controller
 
 {
+    public function __construct()
+    {
+        $this->middleware('permission:Can Access Product')->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    }
 
     /**
 

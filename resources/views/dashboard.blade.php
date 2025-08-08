@@ -60,6 +60,34 @@
         </div>
     </div>
     @endcan
+    <div class="col mb-4">
+        <div class="card total-user-hover" style="height: 135px;">
+            <div class="d-flex justify-content-between mb-3">
+                <div class="card-body">
+                    <h6 class="d-block text-500 font-medium mb-3">TOTAL ORDER</h6>
+                    <div class="text-900 fs-4" id="total_order"></div>
+                </div>
+                <div class="d-flex align-items-center justify-content-center rounded"
+                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
+                    <i class='bx bx-cart'></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-4">
+        <div class="card total-user-hover" style="height: 135px;">
+            <div class="d-flex justify-content-between mb-3">
+                <div class="card-body">
+                    <h6 class="d-block text-500 font-medium mb-3">TODAY'S ORDER</h6>
+                    <div class="text-900 fs-4" id="today_order"></div>
+                </div>
+                <div class="d-flex align-items-center justify-content-center rounded"
+                    style="width: 2.5rem; height: 2.5rem; margin-top: 10px; margin-right: 5px">
+                    <i class='bx bx-cart'></i>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @can('Can Access Full Card')
@@ -89,6 +117,7 @@
 
 
 <div class="row row-cols-0 row-cols-md-6">
+    @can('Low Stock Product')
     <div class="col mb-4 box" style="width: 50%;">
         <div class="card">
             <div class="card-body">
@@ -118,7 +147,8 @@
             </div>
         </div>
     </div>
-
+    @endcan
+    @can('Expiring Product')
     <div class="col mb-4 box" style="width: 50%;">
         <div class="card">
             <div class="card-body">
@@ -153,6 +183,7 @@
             </div>
         </div>
     </div>
+    @endcan
 </div>
 
 @can('Can Access Full Card')
@@ -174,6 +205,31 @@
             </div>
             <div class="pb-3">
                 <div id="yearly_cost" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@endcan
+
+@can('Order Report')
+<div class="row row-cols-2 row-cols-md-6">
+    <div class="col mb-4 box" style="width: 50%;">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>MONTHLY ORDER REPORTS</h3>
+            </div>
+            <div class="pb-3">
+                <div id="monthly_order" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-4 box" style="width: 50%;">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3>YEARLY ORDER REPORTS</h3>
+            </div>
+            <div class="pb-3">
+                <div id="yearly_order" style="height: 400px;"></div>
             </div>
         </div>
     </div>
@@ -251,6 +307,43 @@ $(document).ready(function() {
         });
     }
     GetPendingRequisition();
+
+    
+    //total_order
+    function GetTotalOrder() {
+        return $.ajax({
+            url: "{{route('orders.total')}}",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.status == true) {
+                    var totalOrder = response.data.length;
+                    $('#total_order').html(totalOrder);
+                } else {
+                    $('#total_order').html(0);
+                }
+            }
+        });
+    }
+    GetTotalOrder();
+
+    //todays_order
+    function GetTodaysOrder() {
+        return $.ajax({
+            url: "{{route('orders.today')}}",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.status == true) {
+                    var todaysOrder = response.data.length;
+                    $('#today_order').html(todaysOrder);
+                } else {
+                    $('#today_order').html(0);
+                }
+            }
+        });
+    }
+    GetTodaysOrder();
 
     //total product
     function GetTotalProduct() {
@@ -495,6 +588,111 @@ $(document).ready(function() {
     }
 
     GetYearlyReport();
+
+    // Get monthly order Report
+    function GetMonthlyOrderReport() {
+        $.ajax({
+            url: "{{ route('statistics.monthly.order') }}",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.status === true) {
+                    console.log(response);
+                    var monthlyData = response.data.map(Number); // Convert data to numbers
+                    var categories = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+
+                    Highcharts.chart('monthly_order', {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: "Monthly Order Distribution"
+                        },
+                        tooltip: {
+                            pointFormat: "{series.name}: <b>{point.y}</b>"
+                        },
+                        accessibility: {
+                            point: {
+                                valueSuffix: ''
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.y}'
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Orders',
+                            colorByPoint: true,
+                            data: categories.map((month, index) => ({
+                                name: month,
+                                y: monthlyData[index] || 0
+                            }))
+                        }]
+                    });
+                }
+            }
+        });
+    }
+    GetMonthlyOrderReport();
+
+     //get yearly order Report
+     function GetYearlyOrderReport() {
+        $.ajax({
+            url: "{{ route('yearly.order') }}",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.status === true) {
+                    var yearlyReport = response.data;
+
+                    Highcharts.chart('yearly_order', {
+                        chart: {
+                            type: 'column', // Bar chart type
+                            backgroundColor: '#FFFFFF', // Light background
+                            zoomType: 'xy' // Enable zooming on both axes
+                        },
+                        title: {
+                            text: 'Yearly Order Report',
+                            align: 'center',
+                            style: {
+                                fontSize: '18px',
+                                fontWeight: 'bold',
+                                color: '#333'
+                            }
+                        },
+                        xAxis: {
+                            categories: yearlyReport.years,
+                            title: {
+                                text: 'Years'
+                            },
+                            gridLineWidth: 1, // Light grid lines
+                            crosshair: true
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Total Orders'
+                            },
+                            gridLineWidth: 1, // Light grid lines
+                            crosshair: true
+                        },
+                        series: [{
+                            name: 'Orders',
+                            data: yearlyReport.total_orders
+                        }]
+                    });
+                }
+            }
+        });
+    }
+
+    GetYearlyOrderReport();
 
     // Monthly Report using Highcharts
     function GetMonthlyCostReport() {

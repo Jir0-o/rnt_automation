@@ -10,7 +10,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Order number {{ $requisition->invoice_no}}</title>
+    <title>Order number {{ $requisition->order_no}}</title>
 
 
 <style>
@@ -164,12 +164,12 @@
                     <table style="width: 100%; border-collapse: collapse; margin-top: 0px;">
                         <tr>
                             <td style="border-bottom: 1px solid black; padding: 0px 0px 0px 5px;">
-                                <strong>Date:</strong> {{ Carbon::parse($requisition->requisition_date)->format('d-F-Y') }}
+                                <strong>Date:</strong> {{ Carbon::parse($requisition->order_date)->format('d-F-Y') }}
                             </td>
                         </tr>
                         <tr>
                             <td style="border-bottom: 1px solid black; padding: 0px 0px 0px 5px;">
-                                <strong>Order No: <span id="requisitionNo">{{ $requisition->sr_no }}</span></strong> <!-- Add here -->
+                                <strong>Order No: <span id="requisitionNo">{{ $requisition->order_no }}</span></strong> <!-- Add here -->
                             </td>
                         </tr>
                         <tr>

@@ -69,22 +69,30 @@
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Requisition Section</span>
                 </li>
-                @if (Auth::user()->can('Can Access Inventory Manu'))
-                <li class="menu-item operation {{ request()->is('requisitions/create') || request()->is('allocations/create') || request()->is('purchases/create') ? 'open' : '' }}">
+                @can('Can Access Inventory Manu')
+                <li class="menu-item operation {{ request()->is('requisitions/create') || request()->is('allocations/create') || request()->is('get-invoice.create') || request()->is('purchases/create') ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bxs-cart"></i>
                         <div data-i18n="Layouts">Operation</div>
                         <span class="badge bg-danger ms-auto"></span>
                     </a>
                     <ul class="menu-sub">
-                        @if (Auth::user()->can('Can Access Requisitions'))
+                        @can('Can Access Requisitions')
                         <li class="menu-item requisitions {{ request()->is('requisitions/create') ? 'active' : '' }}">
                             <a href="{{ route('requisitions.create') }}" class="menu-link">
                                 <div data-i18n="Without menu">Requisitions</div>
                                 <span class="badge bg-danger ms-auto"></span>
                             </a>
                         </li>
-                        @endif
+                        @endcan
+                        @can('Can Access Create Invoice')
+                        <li class="menu-item requisitions {{ request()->is('get-invoice/create') ? 'active' : '' }}">
+                            <a href="{{ route('get-invoice.create') }}" class="menu-link">
+                                <div data-i18n="Without menu">Create Invoice</div>
+                                <span class="badge bg-danger ms-auto"></span>
+                            </a>
+                        </li>
+                        @endcan
                         <!-- @if (Auth::user()->can('Can Access Allocations'))
                         <li class="menu-item allocations {{ request()->is('allocations/create') ? 'active' : '' }}">
                             <a href="{{ route('allocations.create') }}" class="menu-link">
@@ -93,16 +101,16 @@
                             </a>
                         </li>
                         @endif -->
-                        @if (Auth::user()->can('Can Access Purchase Invoice'))
+                        @can('Can Access Purchase Invoice')
                         <li class="menu-item {{ request()->is('purchases/create') ? 'active' : '' }}">
                             <a href="{{ route('purchases.create') }}" class="menu-link">
                                 <div data-i18n="Without menu">Purchase Invoice</div>
                             </a>
                         </li>
-                        @endif
+                        @endcan
                     </ul>
                 </li>
-                @endif
+                @endcan
                 <!-- @if (Auth::user()->can('Can Access Approved List Manu'))
                 <li class="menu-item approved {{ request()->is('issue-vouchers/create') || request()->is('leisure-report') ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -191,13 +199,17 @@
                                 <span class="badge bg-danger ms-auto"></span>
                             </a>
                         </li>
+                        @endif
                         
+                        @if (Auth::user()->can('Can Access Unit Type'))
                         <li class="menu-item unit_types {{ request()->is('unit-types/create') ? 'active' : '' }}">
                             <a href="{{ route('unit-types.create') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Unit Type</div>
                                 <span class="badge bg-danger ms-auto"></span>
                             </a>
                         </li>
+                        @endif
+                        @if (Auth::user()->can('Can Access Company'))
                         <li class="menu-item companies {{ request()->is('companies') ? 'active' : '' }}">
                             <a href="{{ route('companies.index') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Company</div>
@@ -419,13 +431,15 @@
                 </li>
                 @endcan
 
+                @can('Can Access Order Details')
+
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Order Section</span>
                 </li>
                 
                 <li class="menu-item all_item {{ request()->is('orders') || request()->is('orders') ? 'open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons bx bxs-wallet"></i>
+                        <i class="menu-icon tf-icons bx bxs-cart"></i>
                         <div data-i18n="Layouts">Order Details</div>
                         <span class="badge bg-danger ms-auto"></span>
                     </a>
@@ -440,7 +454,7 @@
                         </li>
                     </ul>
                 </li>
-
+                @endcan
                 @can('Can Access Report')
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Report Section</span>
@@ -477,7 +491,7 @@
                 </li>
                 @endcan
 
-                <!-- @if (Auth::user()->can('Can Access Setting'))
+                 @if (Auth::user()->can('Can Access Setting'))
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Settings Section</span>
                 </li>
@@ -488,31 +502,27 @@
                         <div data-i18n="Settings">Settings</div>
                     </a>
                 </li>
-
-                @if (Auth::user()->can('Can Access Department'))
-                <li class="menu-item {{ request()->is('departments/create') ? 'active' : '' }}">
-                    <a href="{{route('departments.create')}}" class="menu-link">
-                        <i class="menu-icon bx bx-cog"></i>
-                        <div data-i18n="Settings">Department Head</div>
-                    </a>
-                </li>                
                 @endif
+          
+                @can('Can Access Designation')
                 <li class="menu-item {{ request()->is('designations/index') ? 'active' : '' }}">
                     <a href="{{route('designations.index')}}" class="menu-link">
                         <i class="menu-icon bx bx-cog"></i>
                         <div data-i18n="Settings">Designation List</div>
                     </a>
                 </li>
+                @endcan
 
+                @can('Can Access Department')
                 <li class="menu-item {{ request()->is('department/show') ? 'active' : '' }}">
                     <a href="{{route('department.show')}}" class="menu-link">
                         <i class="menu-icon bx bx-cog"></i>
                         <div data-i18n="Settings">Department List</div>
                     </a>
                 </li>
-                @endif -->
+                @endcan
 
-                <!-- @if (Auth::user()->can('Can Access Department'))
+                {{-- @if (Auth::user()->can('Can Access Department'))
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Head Section</span>
                 </li>
@@ -522,7 +532,7 @@
                         <div data-i18n="Settings">Department Head</div>
                     </a>
                 </li>
-                @endif -->
+                @endif --}}
             </ul>
         </aside>
         <!-- / Menu -->

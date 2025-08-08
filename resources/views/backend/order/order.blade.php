@@ -21,6 +21,7 @@
                     <div class="col-12 col-md-6">
                         <h5>Order List</h5>
                     </div>
+                    @can('Can Access Create Order')
                     <div class="col-12 col-md-6">
                         <div class="float-end">
                             <!-- Button trigger modal -->
@@ -30,6 +31,7 @@
                             </button>
                         </div>
                     </div>
+                    @endcan
 
                     <!-- Modal -->
                     <div class="modal fade Requisitions" id="RequisitionShow" tabindex="-1"
@@ -189,7 +191,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -242,7 +244,7 @@
                                         </button>
                                         @endif
                                         <!-- //print requisition -->
-                                        <a href="{{ route('requisitions.print', $requisition->id) }}" class=""
+                                        <a href="{{ route('order.print', $requisition->id) }}" class=""
                                             target="_blank">
                                             <button class="btn btn-info">
                                                 <i class="bx bx-printer me-1"></i> Print
@@ -264,7 +266,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -286,7 +288,7 @@
                                     <td>{{ $requisition->user->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y') }}
                                     </td>
-                                    <td>{{ $requisition->requisition_no }}</td>
+                                    <td>{{ $requisition->order_no }}</td>
                                     <td>
                                         @if ($requisition->status == 0)
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -316,7 +318,7 @@
                                             <i class="bx bx-show me-1"></i> Show
                                         </button>
                                         <!-- //print requisition -->
-                                        <a href="{{ route('requisitions.print', $requisition->id) }}" class=""
+                                        <a href="{{ route('order.print', $requisition->id) }}" class=""
                                             target="_blank">
                                             <button class="btn btn-info">
                                                 <i class="bx bx-printer me-1"></i> Print
@@ -359,7 +361,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -371,7 +373,7 @@
                                     <td>{{ $requisition->user->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y') }}
                                     </td>
-                                    <td>{{ $requisition->requisition_no }}</td>
+                                    <td>{{ $requisition->order_no }}</td>
                                     <td>
                                         @if ($requisition->status == 0)
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -407,7 +409,7 @@
                                         </button>
                                         @endif
                                         <!-- //print requisition -->
-                                        <a href="{{ route('requisitions.print', $requisition->id) }}" class=""
+                                        <a href="{{ route('order.print', $requisition->id) }}" class=""
                                             target="_blank">
                                             <button class="btn btn-info">
                                                 <i class="bx bx-printer me-1"></i> Print
@@ -428,7 +430,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -440,7 +442,7 @@
                                     <td>{{ $requisition->user->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y') }}
                                     </td>
-                                    <td>{{ $requisition->requisition_no }}</td>
+                                    <td>{{ $requisition->order_no }}</td>
                                     <td>
                                         @if ($requisition->status == 0)
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -470,7 +472,7 @@
                                             <i class="bx bx-show me-1"></i> Show
                                         </button>
                                         <!-- //print requisition -->
-                                        <a href="{{ route('requisitions.print', $requisition->id) }}" class=""
+                                        <a href="{{ route('order.print', $requisition->id) }}" class=""
                                             target="_blank">
                                             <button class="btn btn-info">
                                                 <i class="bx bx-printer me-1"></i> Print
@@ -491,7 +493,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -503,7 +505,7 @@
                                     <td>{{ $requisition->user->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y') }}
                                     </td>
-                                    <td>{{ $requisition->requisition_no }}</td>
+                                    <td>{{ $requisition->order_no }}</td>
                                     <td>
                                         @if ($requisition->status == 0)
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -534,7 +536,7 @@
                                             <i class="bx bx-show me-1"></i> Show
                                         </button>
                                         <!-- //print requisition -->
-                                        <a href="{{ route('requisitions.print', $requisition->id) }}" class=""
+                                        <a href="{{ route('order.print', $requisition->id) }}" class=""
                                             target="_blank">
                                             <button class="btn btn-info">
                                                 <i class="bx bx-printer me-1"></i> Print
@@ -566,7 +568,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -578,7 +580,7 @@
                                     <td>{{ $requisition->user->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y') }}
                                     </td>
-                                    <td>{{ $requisition->requisition_no }}</td>
+                                    <td>{{ $requisition->order_no }}</td>
                                     <td>
                                         @if ($requisition->status == 0)
                                         <span class="badge bg-warning">Pending Authorization</span>
@@ -609,7 +611,7 @@
                                             <i class="bx bx-show me-1"></i> Show
                                         </button>
                                         <!-- //print requisition -->
-                                        <a href="{{ route('requisitions.print', $requisition->id) }}" class=""
+                                        <a href="{{ route('order.print', $requisition->id) }}" class=""
                                             target="_blank">
                                             <button class="btn btn-info">
                                                 <i class="bx bx-printer me-1"></i> Print
@@ -641,7 +643,7 @@
                                     <th>SL</th>
                                     <th>Name</th>
                                     <th>Date</th>
-                                    <th>Requisition No</th>
+                                    <th>Order No</th>
                                     <th>Return Reason</th>
                                     <th>Status</th>
                                     <th>Actions</th>
@@ -654,7 +656,7 @@
                                     <td>{{ $requisition->user->name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($requisition->requisition_date)->format('d-F-Y') }}
                                     </td>
-                                    <td>{{ $requisition->requisition_no }}</td>
+                                    <td>{{ $requisition->order_no }}</td>
                                     <td>{!! $requisition->remarks !!}</td>
                                     <td>
                                         @if ($requisition->status == 0)
@@ -686,7 +688,7 @@
                                             <i class="bx bx-show me-1"></i> Show
                                         </button>
                                         <!-- //print requisition -->
-                                        <a href="{{ route('requisitions.print', $requisition->id) }}" class=""
+                                        <a href="{{ route('order.print', $requisition->id) }}" class=""
                                             target="_blank">
                                             <button class="btn btn-info">
                                                 <i class="bx bx-printer me-1"></i> Print
